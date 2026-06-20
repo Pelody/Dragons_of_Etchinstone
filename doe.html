@@ -20,8 +20,16 @@
   .row{display:flex;flex-wrap:wrap;gap:8px}
   .card{position:relative;flex:1 1 calc(50% - 8px);min-width:150px;background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:8px 10px}
   .card.sel{outline:2px solid #6ee7ff;background:var(--panel2)}
-  .card .nm{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .card .st{font-size:12px;color:var(--muted);margin-top:2px}
+  .card .nm{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
+  .chips{display:flex;flex-wrap:wrap;gap:5px 9px;margin-top:6px}
+  .chips.big{gap:7px 12px;font-size:15px}
+  .chip{display:inline-flex;align-items:center;gap:2px;font-size:13px;color:var(--txt)}
+  .chip b{font-weight:700}
+  .tier{display:inline-flex;align-items:center;gap:1px;background:#0006;border-radius:8px;padding:2px 6px}
+  svg{flex:none}
+  .legendbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:8px 0;font-size:13px}
+  .legendbox summary{cursor:pointer;color:var(--muted)}
+  #legend{margin-top:8px}
   .card .lv{position:absolute;top:6px;right:8px;font-size:11px;background:#000a;border-radius:8px;padding:1px 6px}
   .badge{position:absolute;top:6px;left:8px;font-size:11px;font-weight:700;border-radius:8px;padding:1px 7px}
   .b-s{background:#22c55e;color:#062} .b-e{background:#60a5fa;color:#013} .b-b{background:#f59e0b;color:#310} .b-r{background:#555;color:#ddd} .b-c{background:#ef4444;color:#fff}
@@ -49,6 +57,7 @@
     <div><b>Dragons of Etchinstone</b><div class="muted" id="sub">準備中…</div></div>
     <div class="muted" id="deckinfo"></div>
   </div>
+  <details class="legendbox"><summary>圖例 / 說明</summary><div id="legend" class="chips"></div></details>
   <div id="main"></div>
   <h2>紀錄</h2>
   <div id="log"></div>
@@ -646,15 +655,59 @@
 
 </script>
 <script>
+window.onerror=function(msg,src,line,col){
+  var s=document.getElementById('sub'); if(s)s.textContent='發生錯誤';
+  var m=document.getElementById('main'); if(m)m.innerHTML='<div class="banner">JS 錯誤：'+msg+' （'+line+':'+col+'）</div>';
+  return false;
+};
 const EL={water:"w",fire:"f",lightning:"l",shadow:"s"};
-const EN={water:"水",fire:"火",lightning:"雷",shadow:"暗"};
-const AC={attack:"攻",move:"走",both:"攻/走"};
+const ELC={water:"#3b82f6",fire:"#ef4444",lightning:"#eab308",shadow:"#a78bfa"};
+const elc=(e)=>ELC[e]||"#cbd5e1";
+// SVG 圖示（24x24 path）：元素/動作/防具…，顏色代表屬性
+const PATHS={
+  water:"M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z",
+  fire:"M13 2c.4 4 4 5 4 9a5 5 0 0 1-10 0c0-2.2 1.3-3.4 2.2-4 .1 1 .7 1.7 1.3 2C9.5 6.5 11 4 13 2z",
+  lightning:"M13 2L4 14h6l-2 8 10-13h-7l2-7z",
+  shadow:"M15.5 2A9 9 0 1 0 20 15 7.5 7.5 0 0 1 15.5 2z",
+  sword:"M11 2h2v11h-2zM8 13h8v2H8zM11 15h2v6h-2z",
+  boot:"M8 3h3v9h3.5c2.2 0 4.5 1.4 4.5 4v2a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V3z",
+  shield:"M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5l8-3z",
+  boost:"M12 3l7 8h-4v8h-6v-8H5z",
+  init:"M4 5l7 7-7 7zM12 5l7 7-7 7z",
+  upgrade:"M12 3l6 7h-4v5h-4v-5H6zM7 18h10v2H7z",
+  hourglass:"M6 2h12v3.5L13 10l5 4.5V18H6v-3.5L11 10 6 5.5z",
+  heart:"M12 21C6 16 3 12.5 3 8.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 9 2.5C21 12.5 18 16 12 21z",
+  mountain:"M2 19l6-11 4 6 2.5-4L22 19z",
+  star:"M12 2l2.9 6 6.1.9-4.5 4.2 1.1 6.1L12 16.4 6.4 19.2l1.1-6.1L3 8.9 9.1 8z",
+  skull:"M12 2a8 8 0 0 0-8 8c0 2.4 1.4 3.9 2.4 5v3h2v-2h1v2h1v-2h1v2h2v-3c1-1.1 2.6-2.6 2.6-5a8 8 0 0 0-8-8zM9 9a1.6 1.6 0 1 1 0 3.2A1.6 1.6 0 0 1 9 9zm6 0a1.6 1.6 0 1 1 0 3.2A1.6 1.6 0 0 1 15 9z",
+};
+function ic(name,color,size){size=size||14;return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="${color||'#cbd5e1'}" aria-hidden="true"><path d="${PATHS[name]}"/></svg>`;}
+function chip(name,color,num){return `<span class="chip">${ic(name,color)}${num!=null?`<b>${num}</b>`:""}</span>`;}
+function actName(t){return t==="move"?"boot":"sword";}        // attack→劍, move→靴
+function actChip(action,color){
+  if(action.type==="both") return `<span class="chip">${ic("sword",color)}${ic("boot",color)}<b>${action.value}</b></span>`;
+  return chip(actName(action.type),color,action.value);
+}
 let g, ui;
 
+function buildLegend(){
+  const el=document.getElementById("legend"); if(!el) return;
+  const L=[
+    chip("init","#cbd5e1")+"先攻", actChip({type:"attack",value:""},"#cbd5e1")+"攻擊",
+    actChip({type:"move",value:""},"#cbd5e1")+"移動", chip("boost","#cbd5e1")+"Boost",
+    chip("shield","#cbd5e1")+"護甲", chip("upgrade","#cbd5e1")+"升級花費",
+    chip("heart","#fca5a5")+"HP", chip("mountain","#93c5fd")+"MP",
+    chip("hourglass","#cbd5e1")+"時間懲罰", chip("star","#fcd34d")+"XP",
+    "顏色＝屬性：", ic("water",elc("water"),16)+"水", ic("fire",elc("fire"),16)+"火",
+    ic("lightning",elc("lightning"),16)+"雷", ic("shadow",elc("shadow"),16)+"暗",
+  ];
+  el.innerHTML=L.map(s=>`<span class="chip">${s}</span>`).join("");
+}
 function newGame(seed){
   g=new DOEGame.WebGame(seed||((Math.random()*1e9)|0),"DOE-D01");
   g.start();
   ui={sel:{s:null,e:null,b:null},bt:"attack",dpicks:[],upicks:[],logLen:0};
+  buildLegend();
   render();
 }
 function cur(c){return c.levels[c.level];}
@@ -664,13 +717,18 @@ function cardHTML(c,i,opts){
   let badge="";
   if(opts.role) badge=`<span class="badge b-${opts.role}">${{s:"法",e:"元",b:"B",r:"預",c:"消"}[opts.role]}</span>`;
   const sel=opts.sel?"sel":"";
-  const arm=`甲${lv.armorValue}${lv.armorElement?EN[lv.armorElement]:""}`;
-  const enh=`強${AC[lv.enhanced.type]}${lv.enhanced.value}${lv.enhanced.element?EN[lv.enhanced.element]:""}`;
+  const armColor=lv.armorElement?elc(lv.armorElement):"#cbd5e1";
   return `<div class="card ${cls} ${sel}" data-i="${i}">
     ${badge}<span class="lv">L${c.level}</span>
-    <div class="nm">${c.name}</div>
-    <div class="st">${EN[c.cardElement]} · 先${lv.initiative} · 基${AC[lv.basic.type]}${lv.basic.value} · ${enh}</div>
-    <div class="st">B+${lv.boost} · ${arm} · 升${lv.upgradeCost}</div>
+    <div class="nm">${ic(c.cardElement,elc(c.cardElement),16)} ${c.name}</div>
+    <div class="chips">
+      ${chip("init","#cbd5e1",lv.initiative)}
+      ${actChip(lv.basic,"#cbd5e1")}
+      ${actChip(lv.enhanced,elc(lv.enhanced.element))}
+      ${chip("boost","#cbd5e1",lv.boost)}
+      ${chip("shield",armColor,lv.armorValue)}
+      ${chip("upgrade","#cbd5e1",lv.upgradeCost)}
+    </div>
   </div>`;
 }
 function handHTML(roleOf){
@@ -682,17 +740,25 @@ function roleOfIdx(i){if(i===ui.sel.s)return"s";if(i===ui.sel.e)return"e";if(i==
 function encHTML(){
   const e=g.enc, t=e.target;
   if(e.encType==="enemy"){
-    return `<div class="enc"><div class="nm">⚔ 敵人：${t.name}</div>
-      <div><span class="pill">HP ${t.hp}</span><span class="pill">先攻 ${t.initiative}</span>
-      <span class="pill">攻 ${t.attack}${t.attackElement?EN[t.attackElement]:""}</span>
-      ${t.armorValue?`<span class="pill">甲 ${t.armorValue}${t.armorElement?EN[t.armorElement]:""}</span>`:""}
-      <span class="pill">XP ${t.xp}</span>${t.ability?`<span class="pill">能力 ${t.ability}</span>`:""}</div>
+    const armC=t.armorElement?elc(t.armorElement):"#cbd5e1";
+    return `<div class="enc"><div class="nm">${ic("skull","#fca5a5",18)} 敵人：${t.name}</div>
+      <div class="chips big">
+        ${chip("heart","#fca5a5",t.hp)}
+        ${chip("init","#cbd5e1",t.initiative)}
+        ${chip("sword",elc(t.attackElement),t.attack)}
+        ${t.armorValue?chip("shield",armC,t.armorValue):""}
+        ${chip("star","#fcd34d",t.xp)}
+      </div>
+      ${t.ability?`<div class="muted">能力：${t.ability}</div>`:""}
       ${e.hardships.length?`<div class="muted">苦難：${e.hardships.join(",")}</div>`:""}</div>`;
   }
-  return `<div class="enc"><div class="nm">🧭 旅程：${t.name}</div>
-    <div><span class="pill">MP ${t.mp}${t.mpElement?EN[t.mpElement]:""}</span>
-    <span class="pill">時間懲罰 ${t.timePenalty}</span><span class="pill">XP ${t.xp}</span>
-    ${t.peril?`<span class="pill">危險 ${t.peril}</span>`:""}</div>
+  return `<div class="enc"><div class="nm">${ic("mountain","#93c5fd",18)} 旅程：${t.name}</div>
+    <div class="chips big">
+      ${chip("mountain",elc(t.mpElement),t.mp)}
+      ${chip("hourglass","#cbd5e1",t.timePenalty)}
+      ${chip("star","#fcd34d",t.xp)}
+    </div>
+    ${t.peril?`<div class="muted">危險：${t.peril}</div>`:""}
     ${e.hardships.length?`<div class="muted">苦難：${e.hardships.join(",")}</div>`:""}</div>`;
 }
 
@@ -767,12 +833,15 @@ function viewFor(){
 }
 function dragonHTML(){
   const d=g.dragon;
+  const arm=d.armor.map(a=>chip("shield",elc(a.element),a.value)).join("");
+  const mp=d.mpTiers.map(t=>`<span class="tier">${chip("mountain",elc(t[1]),t[0])}${chip("hourglass","#cbd5e1",t[2])}</span>`).join("");
+  const hp=d.hpTiers.map(t=>`<span class="tier">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</span>`).join("");
   return `<div class="enc"><div class="nm">🐲 ${d.name}</div>
-    <div><span class="pill">先攻 ${d.initiative}</span>
-    <span class="pill">早期 ${d.earlyDamage.value}${EN[d.earlyDamage.element]||""}</span>
-    <span class="pill">護甲 ${d.armor.map(a=>EN[a.element]+a.value).join(" ")}</span></div>
-    <div class="muted">MP檔 ${d.mpTiers.map(t=>t[0]+EN[t[1]]+"(懲"+t[2]+")").join(" ")}</div>
-    <div class="muted">HP檔 ${d.hpTiers.map(t=>t[0]+"(攻"+t[1].value+EN[t[1].element]+")").join(" ")}</div></div>`;
+    <div class="chips big">${chip("init","#cbd5e1",d.initiative)}
+      ${chip("boost","#fca5a5",d.earlyDamage.value)}${ic(d.earlyDamage.element,elc(d.earlyDamage.element),14)}
+      ${arm}</div>
+    <div class="muted" style="margin-top:4px">最終旅程 MP</div><div class="chips">${mp}</div>
+    <div class="muted" style="margin-top:4px">最終敵人 HP</div><div class="chips">${hp}</div></div>`;
 }
 
 // ---- 互動 ----
@@ -829,7 +898,11 @@ function setHint(){
   h.textContent=map[g.phase]||"";
 }
 
-newGame();
+try { newGame(); }
+catch(e){
+  document.getElementById('sub').textContent='發生錯誤';
+  document.getElementById('main').innerHTML='<div class="banner">啟動失敗：'+(e&&e.message||e)+'</div>';
+}
 </script>
 </body>
 </html>
