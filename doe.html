@@ -23,8 +23,14 @@
   .face{display:flex;gap:6px;margin-top:4px}
   .half{flex:1;min-width:0}
   .half.flip{transform:rotate(180deg)}
-  .hname{font-size:12px;font-weight:600;display:flex;align-items:center;gap:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
+  .cardname{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;margin:2px 1px 6px}
+  .cardname.flip{transform:rotate(180deg);margin:6px 1px 2px}
+  .cardname .cn{overflow:hidden;text-overflow:ellipsis}
   .lvtag{background:#000a;border-radius:6px;padding:0 5px;font-size:11px;flex:none}
+  .rolepop{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#0b0e18ee;border:2px solid #fff3;border-radius:12px;padding:5px 15px;font-size:18px;font-weight:800;z-index:4;pointer-events:none;letter-spacing:.5px}
+  .rp-s{color:#22c55e;border-color:#22c55e}
+  .rp-e{color:#60a5fa;border-color:#60a5fa}
+  .rp-b{color:#f59e0b;border-color:#f59e0b}
   .r{display:flex;align-items:center;gap:5px;font-size:16px;margin:5px 0}
   .r b{font-weight:700}
   .card .nm{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
@@ -723,30 +729,35 @@ function actR(act,color){
   const i=act.type==="both"?ic("sword",color)+ic("boot",color):ic(act.type==="move"?"boot":"sword",color);
   return `<div class="r">${i}<b>${act.value}</b></div>`;
 }
-function halfHTML(c,L){
+function statsHTML(c,L){
   const lv=c.levels[L];
   const armC=lv.armorElement?elc(lv.armorElement):"#cbd5e1";
-  return `<div class="hname"><span class="lvtag">L${L}</span>${ic(c.cardElement,elc(c.cardElement),13)} ${c.name}</div>`
-    + row("init","#cbd5e1",lv.initiative)
+  return row("init","#cbd5e1",lv.initiative)
     + actR(lv.basic,"#cbd5e1")
     + actR(lv.enhanced,elc(lv.enhanced.element))
     + row("boost","#cbd5e1",lv.boost)
     + row("shield",armC,lv.armorValue)
     + row("upgrade","#cbd5e1",lv.upgradeCost);
 }
+function nameInner(c,L){
+  return `<span class="lvtag">L${L}</span>${ic(c.cardElement,elc(c.cardElement),13)} <span class="cn">${c.name}</span>`;
+}
 function cardHTML(c,i,opts){
   opts=opts||{};
   const cls=EL[c.cardElement];
-  let badge="";
-  if(opts.role) badge=`<span class="badge b-${opts.role}">${{s:"法",e:"元",b:"B",r:"預",c:"消"}[opts.role]}</span>`;
   const sel=opts.sel?"sel":"";
   const L=c.level, flipL=(L%2===1)?L+1:L-1;       // 同一面 180° 翻面的相鄰等級
+  let pop="";
+  if(opts.role && {s:1,e:1,b:1}[opts.role])
+    pop=`<div class="rolepop rp-${opts.role}">${{s:"Spell",e:"Element",b:"Boost"}[opts.role]}</div>`;
   return `<div class="card ${cls} ${sel}" data-i="${i}">
-    ${badge}
+    <div class="cardname">${nameInner(c,L)}</div>
     <div class="face">
-      <div class="half">${halfHTML(c,L)}</div>
-      <div class="half flip">${halfHTML(c,flipL)}</div>
+      <div class="half">${statsHTML(c,L)}</div>
+      <div class="half flip">${statsHTML(c,flipL)}</div>
     </div>
+    <div class="cardname flip">${nameInner(c,flipL)}</div>
+    ${pop}
   </div>`;
 }
 function handHTML(roleOf){
