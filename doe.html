@@ -18,14 +18,15 @@
   h2{font-size:15px;margin:14px 2px 6px}
   .banner{background:linear-gradient(90deg,#2a2f4a,#1b2030);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0}
   .row{display:flex;flex-wrap:wrap;gap:8px}
-  .card{position:relative;flex:1 1 100%;background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:8px 10px}
+  .card{position:relative;flex:1 1 calc(50% - 8px);min-width:150px;background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:8px 10px}
   .card.sel{outline:2px solid #6ee7ff;background:var(--panel2)}
-  .cols{display:flex;gap:8px;margin-top:6px}
-  .col{flex:1;background:#0003;border-radius:10px;padding:6px 8px}
-  .col.flip{opacity:.62}
-  .colh{font-size:11px;color:var(--muted);margin-bottom:4px;white-space:nowrap}
-  .statrow{display:flex;align-items:center;gap:4px;font-size:14px;margin:3px 0}
-  .statrow b{margin-left:auto;font-weight:700}
+  .face{display:flex;gap:6px;margin-top:4px}
+  .half{flex:1;min-width:0}
+  .half.flip{transform:rotate(180deg)}
+  .hname{font-size:12px;font-weight:600;display:flex;align-items:center;gap:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
+  .lvtag{background:#000a;border-radius:6px;padding:0 5px;font-size:11px;flex:none}
+  .r{display:flex;align-items:center;gap:5px;font-size:16px;margin:5px 0}
+  .r b{font-weight:700}
   .card .nm{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
   .chips{display:flex;flex-wrap:wrap;gap:5px 9px;margin-top:6px}
   .chips.big{gap:7px 12px;font-size:15px}
@@ -717,19 +718,21 @@ function newGame(seed){
   render();
 }
 function cur(c){return c.levels[c.level];}
-function statRow(name,color,num){return `<div class="statrow">${ic(name,color)}<b>${num}</b></div>`;}
-function actRow(act,color){
+function row(name,color,num){return `<div class="r">${ic(name,color)}<b>${num}</b></div>`;}
+function actR(act,color){
   const i=act.type==="both"?ic("sword",color)+ic("boot",color):ic(act.type==="move"?"boot":"sword",color);
-  return `<div class="statrow">${i}<b>${act.value}</b></div>`;
+  return `<div class="r">${i}<b>${act.value}</b></div>`;
 }
-function levelStatsHTML(lv){
+function halfHTML(c,L){
+  const lv=c.levels[L];
   const armC=lv.armorElement?elc(lv.armorElement):"#cbd5e1";
-  return statRow("init","#cbd5e1",lv.initiative)
-    + actRow(lv.basic,"#cbd5e1")
-    + actRow(lv.enhanced,elc(lv.enhanced.element))
-    + statRow("boost","#cbd5e1",lv.boost)
-    + statRow("shield",armC,lv.armorValue)
-    + statRow("upgrade","#cbd5e1",lv.upgradeCost);
+  return `<div class="hname"><span class="lvtag">L${L}</span>${ic(c.cardElement,elc(c.cardElement),13)} ${c.name}</div>`
+    + row("init","#cbd5e1",lv.initiative)
+    + actR(lv.basic,"#cbd5e1")
+    + actR(lv.enhanced,elc(lv.enhanced.element))
+    + row("boost","#cbd5e1",lv.boost)
+    + row("shield",armC,lv.armorValue)
+    + row("upgrade","#cbd5e1",lv.upgradeCost);
 }
 function cardHTML(c,i,opts){
   opts=opts||{};
@@ -737,15 +740,12 @@ function cardHTML(c,i,opts){
   let badge="";
   if(opts.role) badge=`<span class="badge b-${opts.role}">${{s:"法",e:"元",b:"B",r:"預",c:"消"}[opts.role]}</span>`;
   const sel=opts.sel?"sel":"";
-  const L=c.level;
-  const flipL=(L%2===1)?L+1:L-1;                 // 180°翻面的相鄰等級
-  const dir=flipL>L?"⬆ 升級":"⬇ 降級";
+  const L=c.level, flipL=(L%2===1)?L+1:L-1;       // 同一面 180° 翻面的相鄰等級
   return `<div class="card ${cls} ${sel}" data-i="${i}">
-    ${badge}<span class="lv">L${L}</span>
-    <div class="nm">${ic(c.cardElement,elc(c.cardElement),16)} ${c.name}</div>
-    <div class="cols">
-      <div class="col"><div class="colh">現值 L${L}</div>${levelStatsHTML(c.levels[L])}</div>
-      <div class="col flip"><div class="colh">${dir} L${flipL}</div>${levelStatsHTML(c.levels[flipL])}</div>
+    ${badge}
+    <div class="face">
+      <div class="half">${halfHTML(c,L)}</div>
+      <div class="half flip">${halfHTML(c,flipL)}</div>
     </div>
   </div>`;
 }
