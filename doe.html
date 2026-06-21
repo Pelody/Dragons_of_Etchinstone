@@ -31,12 +31,15 @@
   .rp-s{color:#22c55e;border-color:#22c55e}
   .rp-e{color:#60a5fa;border-color:#60a5fa}
   .rp-b{color:#f59e0b;border-color:#f59e0b}
-  .r{display:flex;align-items:center;gap:5px;font-size:16px;margin:5px 0}
+  .rp-dmg{color:#fca5a5;border-color:#ef4444}
+  .rp-up{color:#34d399;border-color:#34d399}
+  .rp-warn{color:#fca5a5;border-color:#ef4444}
+  .r{display:flex;align-items:center;gap:6px;font-size:19px;margin:6px 0}
   .r b{font-weight:700}
   .card .nm{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
   .chips{display:flex;flex-wrap:wrap;gap:5px 9px;margin-top:6px}
-  .chips.big{gap:7px 12px;font-size:15px}
-  .chip{display:inline-flex;align-items:center;gap:2px;font-size:13px;color:var(--txt)}
+  .chips.big{gap:8px 13px;font-size:18px}
+  .chip{display:inline-flex;align-items:center;gap:3px;font-size:15px;color:var(--txt)}
   .chip b{font-weight:700}
   .tier{display:inline-flex;align-items:center;gap:1px;background:#0006;border-radius:8px;padding:2px 6px}
   svg{flex:none}
@@ -77,6 +80,10 @@
 </div>
 <div class="hintbar" id="hint">點卡片指派角色：第1下=法術、第2下=元素、第3下=Boost</div>
 
+<script>
+window.DOE_REAL = {"mageCards": [{"name": "Rain of Blood", "cardElement": "lightning", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 2, "boost": 1, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 6, "element": "fire"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 3, "hardship": "hazards"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 1, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "attack", "value": 8, "element": "fire"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 3, "boost": 2, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 11, "element": "fire"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 4, "boost": 3, "basic": {"type": "attack", "value": 7}, "enhanced": {"type": "attack", "value": 14, "element": "fire"}, "armorValue": 5, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}}}, {"name": "Fleet Footed", "cardElement": "lightning", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 5, "boost": 1, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 5, "element": "lightning"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 4, "hardship": "none"}, "2": {"upgradeCost": 4, "initiative": 5, "boost": 2, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "lightning"}, "armorValue": 3, "armorElement": null, "encounterIcon": "journey", "encounterValue": 3, "hardship": "night_travel"}, "3": {"upgradeCost": 6, "initiative": 6, "boost": 4, "basic": {"type": "move", "value": 6}, "enhanced": {"type": "move", "value": 11, "element": "lightning"}, "armorValue": 3, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 4, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 7, "boost": 5, "basic": {"type": "move", "value": 8}, "enhanced": {"type": "move", "value": 14, "element": "lightning"}, "armorValue": 4, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}}}, {"name": "Adapt", "cardElement": "lightning", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 2, "boost": 2, "basic": {"type": "attack/move", "value": 2}, "enhanced": {"type": "attack/move", "value": 3, "element": "shadow"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 3, "basic": {"type": "attack/move", "value": 3}, "enhanced": {"type": "attack/move", "value": 5, "element": "shadow"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 4, "boost": 4, "basic": {"type": "attack/move", "value": 4}, "enhanced": {"type": "attack/move", "value": 7, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 4, "boost": 5, "basic": {"type": "attack/move", "value": 6}, "enhanced": {"type": "attack/move", "value": 9, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "hazards"}}}, {"name": "River Swiftness", "cardElement": "lightning", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 5, "boost": 1, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "move", "value": 4, "element": "water"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 4, "hardship": "none"}, "2": {"upgradeCost": 4, "initiative": 6, "boost": 2, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 6, "element": "water"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 8, "boost": 3, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "water"}, "armorValue": 5, "armorElement": null, "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 9, "boost": 5, "basic": {"type": "move", "value": 8}, "enhanced": {"type": "move", "value": 12, "element": "water"}, "armorValue": 5, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 4, "hardship": "storm"}}}, {"name": "Burning Bridges", "cardElement": "fire", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 1, "boost": 1, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "move", "value": 4, "element": "fire"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "hazards"}, "2": {"upgradeCost": 4, "initiative": 1, "boost": 2, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 5, "element": "fire"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 4, "boost": 2, "basic": {"type": "move", "value": 4}, "enhanced": {"type": "move", "value": 7, "element": "fire"}, "armorValue": 2, "armorElement": "fire", "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 3, "boost": 3, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "fire"}, "armorValue": 3, "armorElement": "fire", "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}}}, {"name": "Motivated Flight", "cardElement": "fire", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 4, "boost": 1, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "move", "value": 4, "element": "lightning"}, "armorValue": 2, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 5, "boost": 2, "basic": {"type": "move", "value": 4}, "enhanced": {"type": "move", "value": 8, "element": "lightning"}, "armorValue": 2, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 7, "boost": 3, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 10, "element": "lightning"}, "armorValue": 3, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 4, "hardship": "night_travel"}, "4": {"upgradeCost": 0, "initiative": 9, "boost": 5, "basic": {"type": "move", "value": 6}, "enhanced": {"type": "move", "value": 12, "element": "lightning"}, "armorValue": 5, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}}}, {"name": "Adapt", "cardElement": "fire", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 2, "boost": 2, "basic": {"type": "attack/move", "value": 2}, "enhanced": {"type": "attack/move", "value": 3, "element": "shadow"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "ambush"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 3, "basic": {"type": "attack/move", "value": 3}, "enhanced": {"type": "attack/move", "value": 5, "element": "shadow"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 4, "boost": 4, "basic": {"type": "attack/move", "value": 4}, "enhanced": {"type": "attack/move", "value": 7, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 4, "boost": 5, "basic": {"type": "attack/move", "value": 6}, "enhanced": {"type": "attack/move", "value": 9, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}}}, {"name": "Ice Wall", "cardElement": "fire", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 4, "boost": 1, "basic": {"type": "attack", "value": 2}, "enhanced": {"type": "attack", "value": 3, "element": "water"}, "armorValue": 2, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 3, "hardship": "storm"}, "2": {"upgradeCost": 3, "initiative": 5, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 5, "element": "water"}, "armorValue": 2, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 2, "hardship": "storm"}, "3": {"upgradeCost": 4, "initiative": 6, "boost": 4, "basic": {"type": "attack", "value": 4}, "enhanced": {"type": "attack", "value": 7, "element": "water"}, "armorValue": 4, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 7, "boost": 5, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 10, "element": "water"}, "armorValue": 6, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}}}, {"name": "Destruction", "cardElement": "water", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 1, "boost": 1, "basic": {"type": "attack", "value": 2}, "enhanced": {"type": "attack", "value": 6, "element": "fire"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "hazards"}, "2": {"upgradeCost": 4, "initiative": 1, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 8, "element": "fire"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 2, "boost": 2, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "attack", "value": 10, "element": "fire"}, "armorValue": 2, "armorElement": "fire", "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 3, "boost": 3, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 13, "element": "fire"}, "armorValue": 3, "armorElement": "fire", "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}}}, {"name": "Sword of Light", "cardElement": "water", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 4, "boost": 2, "basic": {"type": "attack", "value": 2}, "enhanced": {"type": "attack", "value": 4, "element": "lightning"}, "armorValue": 1, "armorElement": null, "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 6, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 9, "element": "lightning"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "night_travel"}, "3": {"upgradeCost": 4, "initiative": 8, "boost": 3, "basic": {"type": "attack", "value": 4}, "enhanced": {"type": "attack", "value": 7, "element": "lightning"}, "armorValue": 3, "armorElement": null, "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 10, "boost": 4, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 10, "element": "lightning"}, "armorValue": 4, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}}}, {"name": "Brute Force", "cardElement": "water", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 1, "boost": 2, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "attack", "value": 4, "element": "shadow"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "ambush"}, "2": {"upgradeCost": 3, "initiative": 1, "boost": 3, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "attack", "value": 5, "element": "shadow"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 2, "boost": 4, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "attack", "value": 9, "element": "shadow"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 3, "boost": 5, "basic": {"type": "move", "value": 6}, "enhanced": {"type": "attack", "value": 11, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}}}, {"name": "Ice Wall", "cardElement": "water", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 4, "boost": 1, "basic": {"type": "attack", "value": 2}, "enhanced": {"type": "attack", "value": 3, "element": "water"}, "armorValue": 2, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 5, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 5, "element": "water"}, "armorValue": 2, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 2, "hardship": "storm"}, "3": {"upgradeCost": 4, "initiative": 6, "boost": 4, "basic": {"type": "attack", "value": 4}, "enhanced": {"type": "attack", "value": 7, "element": "water"}, "armorValue": 4, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 7, "boost": 5, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 10, "element": "water"}, "armorValue": 6, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}}}, {"name": "Rain of Blood", "cardElement": "shadow", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 2, "boost": 1, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 6, "element": "fire"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 1, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "attack", "value": 8, "element": "fire"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 3, "boost": 2, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 11, "element": "fire"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "ambush"}, "4": {"upgradeCost": 0, "initiative": 4, "boost": 3, "basic": {"type": "attack", "value": 7}, "enhanced": {"type": "attack", "value": 14, "element": "fire"}, "armorValue": 5, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}}}, {"name": "Fleet Footed", "cardElement": "shadow", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 5, "boost": 1, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 5, "element": "lightning"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "2": {"upgradeCost": 4, "initiative": 5, "boost": 2, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "lightning"}, "armorValue": 3, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "3": {"upgradeCost": 6, "initiative": 6, "boost": 4, "basic": {"type": "move", "value": 6}, "enhanced": {"type": "move", "value": 11, "element": "lightning"}, "armorValue": 3, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 7, "boost": 5, "basic": {"type": "move", "value": 8}, "enhanced": {"type": "move", "value": 14, "element": "lightning"}, "armorValue": 4, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 2, "hardship": "night_travel"}}}, {"name": "Determined March", "cardElement": "shadow", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 2, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "move", "value": 5, "element": "shadow"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 3, "basic": {"type": "attack", "value": 4}, "enhanced": {"type": "move", "value": 7, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 4, "boost": 5, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "ambush"}, "4": {"upgradeCost": 0, "initiative": 5, "boost": 6, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "move", "value": 12, "element": "shadow"}, "armorValue": 4, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}}}, {"name": "River Swiftness", "cardElement": "shadow", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 5, "boost": 1, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "move", "value": 4, "element": "water"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "2": {"upgradeCost": 4, "initiative": 6, "boost": 2, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 6, "element": "water"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 8, "boost": 3, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "water"}, "armorValue": 5, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 3, "hardship": "storm"}, "4": {"upgradeCost": 0, "initiative": 9, "boost": 5, "basic": {"type": "move", "value": 8}, "enhanced": {"type": "move", "value": 12, "element": "water"}, "armorValue": 5, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 4, "hardship": "none"}}}], "regions": {"1": {"name": "Jade Mountains", "enemies": [{"name": "Jade Mountains #1", "hp": 7, "initiative": 8, "attack": 1, "attackElement": "lightning", "armor": [{"value": 1, "element": "lightning"}], "xp": 4, "ability": null}, {"name": "Jade Mountains #2", "hp": 11, "initiative": 4, "attack": 2, "attackElement": "fire", "armor": [{"value": 1, "element": "fire"}], "xp": 7, "ability": null}, {"name": "Jade Mountains #3", "hp": 9, "initiative": 6, "attack": 2, "attackElement": "water", "armor": [{"value": 2, "element": "water"}], "xp": 5, "ability": null}, {"name": "Jade Mountains #4", "hp": 13, "initiative": 2, "attack": 3, "attackElement": "shadow", "armor": [{"value": 3, "element": "shadow"}], "xp": 8, "ability": null}], "journeys": [{"name": "Jade Mountains #1", "mp": 12, "mpElement": "lightning", "timePenalty": 2, "xp": 5, "peril": null}, {"name": "Jade Mountains #2", "mp": 8, "mpElement": "water", "timePenalty": 1, "xp": 3, "peril": null}, {"name": "Jade Mountains #3", "mp": 11, "mpElement": "fire", "timePenalty": 2, "xp": 4, "peril": null}, {"name": "Jade Mountains #4", "mp": 10, "mpElement": "shadow", "timePenalty": 1, "xp": 3, "peril": null}]}, "2": {"name": "Living Marshes", "enemies": [{"name": "Living Marshes #1", "hp": 9, "initiative": 6, "attack": 2, "attackElement": "shadow", "armor": [{"value": 1, "element": "shadow"}], "xp": 5, "ability": "ranged"}, {"name": "Living Marshes #2", "hp": 10, "initiative": 8, "attack": 2, "attackElement": "lightning", "armor": [{"value": 1, "element": "lightning"}], "xp": 4, "ability": null}, {"name": "Living Marshes #3", "hp": 15, "initiative": 2, "attack": 4, "attackElement": "fire", "armor": [{"value": 3, "element": "fire"}], "xp": 8, "ability": "slow"}, {"name": "Living Marshes #4", "hp": 13, "initiative": 5, "attack": 3, "attackElement": "water", "armor": [{"value": 2, "element": "water"}], "xp": 7, "ability": "freeze"}], "journeys": [{"name": "Living Marshes #1", "mp": 10, "mpElement": "fire", "timePenalty": 2, "xp": 4, "peril": "treacherous"}, {"name": "Living Marshes #2", "mp": 13, "mpElement": "water", "timePenalty": 2, "xp": 7, "peril": null}, {"name": "Living Marshes #3", "mp": 11, "mpElement": "lightning", "timePenalty": 3, "xp": 5, "peril": null}, {"name": "Living Marshes #4", "mp": 9, "mpElement": "shadow", "timePenalty": 2, "xp": 4, "peril": "steep"}]}, "3": {"name": "Burning Basin", "enemies": [{"name": "Burning Basin #1", "hp": 17, "initiative": 5, "attack": 3, "attackElement": "shadow", "armor": [{"value": 3, "element": "shadow"}], "xp": 9, "ability": null}, {"name": "Burning Basin #2", "hp": 14, "initiative": 4, "attack": 3, "attackElement": "water", "armor": [{"value": 3, "element": "water"}], "xp": 8, "ability": "slow"}, {"name": "Burning Basin #3", "hp": 11, "initiative": 9, "attack": 2, "attackElement": "fire", "armor": [{"value": 2, "element": "fire"}], "xp": 7, "ability": "poison"}, {"name": "Burning Basin #4", "hp": 9, "initiative": 7, "attack": 2, "attackElement": "lightning", "armor": [{"value": 2, "element": "lightning"}], "xp": 5, "ability": "ranged"}], "journeys": [{"name": "Burning Basin #1", "mp": 14, "mpElement": "water", "timePenalty": 2, "xp": 7, "peril": "steep"}, {"name": "Burning Basin #2", "mp": 12, "mpElement": "lightning", "timePenalty": 3, "xp": 6, "peril": null}, {"name": "Burning Basin #3", "mp": 10, "mpElement": "fire", "timePenalty": 3, "xp": 5, "peril": "treacherous"}, {"name": "Burning Basin #4", "mp": 11, "mpElement": "shadow", "timePenalty": 2, "xp": 5, "peril": null}]}, "4": {"name": "Forests of Gath", "enemies": [{"name": "Forests of Gath #1", "hp": 13, "initiative": 6, "attack": 2, "attackElement": "shadow", "armor": [{"value": 3, "element": "shadow"}, {"value": 2, "element": "water"}], "xp": 7, "ability": "poison"}, {"name": "Forests of Gath #2", "hp": 9, "initiative": 10, "attack": 3, "attackElement": "fire", "armor": [{"value": 1, "element": "fire"}], "xp": 5, "ability": "ranged"}, {"name": "Forests of Gath #3", "hp": 14, "initiative": 8, "attack": 4, "attackElement": "lightning", "armor": [{"value": 2, "element": "lightning"}, {"value": 2, "element": "fire"}], "xp": 8, "ability": "freeze"}, {"name": "Forests of Gath #4", "hp": 17, "initiative": 7, "attack": 5, "attackElement": "water", "armor": [{"value": 3, "element": "water"}, {"value": 2, "element": "shadow"}], "xp": 9, "ability": null}], "journeys": [{"name": "Forests of Gath #1", "mp": 14, "mpElement": "water", "timePenalty": 2, "xp": 7, "peril": "treacherous"}, {"name": "Forests of Gath #2", "mp": 13, "mpElement": "shadow", "timePenalty": 3, "xp": 6, "peril": null}, {"name": "Forests of Gath #3", "mp": 12, "mpElement": "fire", "timePenalty": 2, "xp": 5, "peril": null}, {"name": "Forests of Gath #4", "mp": 11, "mpElement": "lightning", "timePenalty": 3, "xp": 5, "peril": "treacherous"}]}}, "dragons": {"Red Dragon": {"name": "Red Dragon", "initiative": 9, "earlyDamage": {"value": 9, "element": "fire"}, "armor": [{"value": 4, "element": "fire"}], "mpTiers": [[20, "fire", 3], [23, "fire", 2], [28, "fire", 1]], "hpTiers": [[22, {"value": 27, "element": "fire"}], [27, {"value": 24, "element": "fire"}], [32, {"value": 15, "element": "fire"}]]}, "Yellow Dragon": {"name": "Yellow Dragon", "initiative": 13, "earlyDamage": {"value": 8, "element": "lightning"}, "armor": [{"value": 4, "element": "lightning"}, {"value": 1, "element": "fire"}], "mpTiers": [[17, "lightning", 4], [21, "lightning", 3], [25, "lightning", 2]], "hpTiers": [[16, {"value": 23, "element": "lightning"}], [21, {"value": 20, "element": "lightning"}], [29, {"value": 13, "element": "lightning"}]]}, "Blue Dragon": {"name": "Blue Dragon", "initiative": 10, "earlyDamage": {"value": 4, "element": "water"}, "armor": [{"value": 5, "element": "water"}, {"value": 3, "element": "lightning"}, {"value": 2, "element": "shadow"}], "mpTiers": [[15, "water", 4], [21, "water", 3], [27, "water", 1]], "hpTiers": [[22, {"value": 26, "element": "water"}], [25, {"value": 20, "element": "water"}], [31, {"value": 11, "element": "water"}]]}, "Gray Dragon": {"name": "Gray Dragon", "initiative": 12, "earlyDamage": {"value": 6, "element": "shadow"}, "armor": [{"value": 4, "element": "shadow"}, {"value": 3, "element": "water"}], "mpTiers": [[19, "shadow", 3], [23, "shadow", 2], [29, "shadow", 1]], "hpTiers": [[21, {"value": 26, "element": "shadow"}], [26, {"value": 20, "element": "shadow"}], [30, {"value": 12, "element": "shadow"}]]}}};
+
+</script>
 <script>
 /* Dragons of Etchinstone — 規則引擎（JS 移植自 prototype.py / doe_data.py）
    可在瀏覽器與 node 使用。狀態機式 WebGame 供 UI 逐步操作。 */
@@ -142,9 +149,15 @@
     else atk += b;
     log.push(`先攻=${init}，攻擊=${atk}${isEnhAttack ? `（強化${atkElem}）` : `（${used}）`}`);
 
-    if (isEnhAttack && enemy.armorElement && enemy.armorElement === atkElem) {
-      atk = Math.max(0, atk - enemy.armorValue);
-      log.push(`強化攻擊${atkElem} 匹配敵人護甲(${enemy.armorElement}${enemy.armorValue}) → 攻擊扣為 ${atk}`);
+    if (isEnhAttack) {
+      const armors = enemy.armor || (enemy.armorElement != null ? [{ value: enemy.armorValue, element: enemy.armorElement }] : []);
+      for (const ar of armors) {
+        if (ar.element && ar.element === atkElem) {
+          atk = Math.max(0, atk - ar.value);
+          log.push(`強化攻擊${atkElem} 匹配敵人護甲(${ar.element}${ar.value}) → 攻擊扣為 ${atk}`);
+          break;
+        }
+      }
     }
 
     let cmp = atk;
@@ -363,6 +376,8 @@
     return { name, cardElement: elem, level: 2, levels };
   }
   function buildMageCards() {
+    if (root.DOE_REAL && root.DOE_REAL.mageCards)
+      return JSON.parse(JSON.stringify(root.DOE_REAL.mageCards)).map(c => { c.level = 2; return c; });
     const specs = [
       ["Brute Force", "water", "attacker", "fire"],
       ["Tidal Guard", "water", "attacker", "water"],
@@ -384,6 +399,7 @@
     return specs.map(s => mkCard(s[0], s[1], s[2], s[3]));
   }
   function buildRegions() {
+    if (root.DOE_REAL && root.DOE_REAL.regions) return root.DOE_REAL.regions;
     const names = { 1: "Jade Mountains", 2: "Living Marsh", 3: "Burning Basin", 4: "Forest of Gath" };
     const abil = [null, null, "ranged", "freeze"];
     const peril = [null, null, "treacherous", "steep"];
@@ -405,6 +421,7 @@
     return regions;
   }
   function buildDragons() {
+    if (root.DOE_REAL && root.DOE_REAL.dragons) return root.DOE_REAL.dragons;
     const H = (v, e) => ({ value: v, element: e });
     return {
       "DOE-D01": { name: "Rodving (The Last Breath)", initiative: 9, earlyDamage: H(9, "fire"),
@@ -495,15 +512,35 @@
     return sets;
   }
 
+  function makeTwoSetsIdx(hand, kind) {
+    const val = (c) => { const b = curLevel(c).basic, e = curLevel(c).enhanced; let v = [1]; if (b.type === kind) v.push(b.value); if (e.type === kind) v.push(e.value); return Math.max(...v); };
+    const used = new Set(), sets = [];
+    for (let k = 0; k < 2; k++) {
+      let av = hand.map((_, i) => i).filter(i => !used.has(i)); if (!av.length) break;
+      let s = av.reduce((a, b) => val(hand[b]) > val(hand[a]) ? b : a, av[0]); used.add(s);
+      const enh = curLevel(hand[s]).enhanced;
+      av = hand.map((_, i) => i).filter(i => !used.has(i)); let el = null;
+      if (enh.type === kind && enh.element) { const m = av.filter(i => hand[i].cardElement === enh.element); if (m.length) el = m.reduce((a, b) => curLevel(hand[b]).initiative > curLevel(hand[a]).initiative ? b : a, m[0]); }
+      if (el == null && av.length) el = av.reduce((a, b) => curLevel(hand[b]).initiative > curLevel(hand[a]).initiative ? b : a, av[0]);
+      if (el != null) used.add(el);
+      av = hand.map((_, i) => i).filter(i => !used.has(i));
+      let bo = av.length ? av.reduce((a, b) => curLevel(hand[b]).boost > curLevel(hand[a]).boost ? b : a, av[0]) : null;
+      if (bo != null) used.add(bo);
+      sets.push({ s, e: el, b: bo });
+    }
+    let reserveIdx = hand.map((_, i) => i).find(i => !used.has(i));
+    return { sets, reserveIdx: reserveIdx == null ? null : reserveIdx };
+  }
+
   // ---------- WebGame 狀態機 ----------
   class WebGame {
     constructor(seed, dragonId) {
       this.rnd = mulberry32((seed >>> 0) || 1);
       this.allCards = buildMageCards();
       this.regions = buildRegions();
-      this.dragon = buildDragons()[dragonId || "DOE-D01"];
+      this.dragon = buildDragons()[dragonId || "Red Dragon"];
       this.deck = []; this.hand = []; this.discard = [];
-      this.regionIdx = 1; this.pendingPoison = 0;
+      this.regionIdx = 1; this.pendingPoison = 0; this.regroupUsed = false;
       this.phase = "init"; this.log = []; this.tx = null;
       this.result = null; // {win, score}
     }
@@ -548,7 +585,9 @@
     // assignment: {s, e, b, t, fusedElement, consumedIdx, negateRanged, slowUseMove}
     resolveAction(a) {
       const enc = this.enc;
-      const set = buildSet(this.hand, a.s, a.e, a.b, a.t, a.fusedElement);
+      let fusedEl = a.fusedElement || null;
+      if (a.fuse && a.s != null) fusedEl = curLevel(this.hand[a.s]).enhanced.element; // 融合：強化必中
+      const set = buildSet(this.hand, a.s, a.e, a.b, a.t, fusedEl);
       const roleIdx = new Set([a.s, a.e, a.b].filter(x => x != null));
       let reserveIdx = null;
       for (let i = 0; i < this.hand.length; i++) if (!roleIdx.has(i)) { reserveIdx = i; break; }
@@ -568,7 +607,7 @@
       }
       r.log.forEach(l => this.out(l));
       this.out(`結果：${r.outcome}｜XP ${r.xp}｜時間懲罰 ${r.timePenalty}｜傷害 ${dmg}`);
-      this.tx = { r, dmg, atkEl, roleCards, reserveCard, set, needDiscardReserve: r.discardReserve };
+      this.tx = { r, dmg, atkEl, roleCards, reserveCard, set, needDiscardReserve: r.discardReserve, fuse: !!a.fuse };
       this.phase = "penalty";
       return r;
     }
@@ -592,6 +631,7 @@
       const tx = this.tx;
       for (const c of tx.roleCards) { const i = this.hand.indexOf(c); if (i >= 0) { this.hand.splice(i, 1); this.discard.push(c); } }
       if (tx.needDiscardReserve && tx.reserveCard) { const i = this.hand.indexOf(tx.reserveCard); if (i >= 0) { this.hand.splice(i, 1); this.discard.push(tx.reserveCard); this.out("清理：棄掉預備卡（Freeze/Ranged）"); } }
+      if (tx.fuse && tx.reserveCard) { const i = this.hand.indexOf(tx.reserveCard); if (i >= 0) { this.hand.splice(i, 1); this.discard.push(tx.reserveCard); this.out("融合：預備卡也棄掉（4 張全棄）"); } }
       this.drawTo(4);
       if (tx.r.poison && this.hand.length) this.pendingPoison += tx.r.poison;
       if (this.pendingPoison && this.hand.length) {
@@ -616,17 +656,20 @@
       this.reshuffleAll(); this.drawTo(7);
       this.phase = "final_journey_intro";
     }
-    // regroupIdx: 要棄的手牌索引 或 null（不 regroup）
-    finalJourney(regroupIdx) {
-      if (regroupIdx != null && this.hand.length) {
-        const dropped = this.hand.splice(regroupIdx, 1)[0];
-        this.discard.push(dropped); shuffle(this.hand, this.rnd);
-        this.deck = this.deck.concat(this.hand); this.hand = []; this.drawTo(7);
-        this.out(`Regroup：棄 ${dropped.name}，重抽 7 張`);
-      }
-      const usedN = Math.min(6, this.hand.length);
-      const reserve = this.hand.length > usedN ? this.hand[usedN] : null;
-      const sets = makeTwoSets(this.hand, "move");
+    // Regroup（整局限一次）：棄 1 張、其餘洗回牌庫後方、重抽 7
+    regroup(idx) {
+      if (this.regroupUsed || idx == null || !this.hand.length) return false;
+      const dropped = this.hand.splice(idx, 1)[0];
+      this.discard.push(dropped); shuffle(this.hand, this.rnd);
+      this.deck = this.deck.concat(this.hand); this.hand = []; this.drawTo(7);
+      this.regroupUsed = true;
+      this.out(`Regroup：棄 ${dropped.name}，重抽 7 張`);
+      return true;
+    }
+    // spec = { sets:[{s,e,b,t?}...], reserveIdx }
+    finalJourneyResolve(spec) {
+      const sets = spec.sets.map(s => buildSet(this.hand, s.s, s.e, s.b, s.t || "move"));
+      const reserve = spec.reserveIdx != null ? this.hand[spec.reserveIdx] : null;
       const fj = resolveFinalJourney(sets, this.dragon, reserve);
       fj.log.forEach(l => this.out(l));
       if (fj.lose) { this._finish(false); return fj; }
@@ -641,9 +684,9 @@
       this.out(`最終敵人：抽光剩餘 ${this.hand.length} 張`);
       return fj;
     }
-    finalEnemy() {
+    finalEnemyResolve(spec) {
       if (!this.hand.length) { this._finish(false); return null; }
-      const sets = makeTwoSets(this.hand, "attack");
+      const sets = spec.sets.map(s => buildSet(this.hand, s.s, s.e, s.b, s.t || "attack"));
       const fe = resolveFinalEnemy(sets, this.dragon);
       fe.log.forEach(l => this.out(l));
       if (fe.lose) { this._finish(false); return fe; }
@@ -662,8 +705,8 @@
   }
 
   root.DOEData = { buildMageCards, buildRegions, buildDragons };
-  root.DOEGame = { WebGame, bestAssignment, orderDowngrades, chooseUpgrades, makeTwoSets, buildSet };
-  if (typeof module !== "undefined" && module.exports) module.exports = { WebGame, bestAssignment, orderDowngrades, chooseUpgrades, makeTwoSets, buildSet, buildMageCards, buildRegions, buildDragons };
+  root.DOEGame = { WebGame, bestAssignment, orderDowngrades, chooseUpgrades, makeTwoSets, makeTwoSetsIdx, buildSet };
+  if (typeof module !== "undefined" && module.exports) module.exports = { WebGame, bestAssignment, orderDowngrades, chooseUpgrades, makeTwoSets, makeTwoSetsIdx, buildSet, buildMageCards, buildRegions, buildDragons };
 })(typeof window !== "undefined" ? window : globalThis);
 
 </script>
@@ -694,7 +737,7 @@ const PATHS={
   star:"M12 2l2.9 6 6.1.9-4.5 4.2 1.1 6.1L12 16.4 6.4 19.2l1.1-6.1L3 8.9 9.1 8z",
   skull:"M12 2a8 8 0 0 0-8 8c0 2.4 1.4 3.9 2.4 5v3h2v-2h1v2h1v-2h1v2h2v-3c1-1.1 2.6-2.6 2.6-5a8 8 0 0 0-8-8zM9 9a1.6 1.6 0 1 1 0 3.2A1.6 1.6 0 0 1 9 9zm6 0a1.6 1.6 0 1 1 0 3.2A1.6 1.6 0 0 1 15 9z",
 };
-function ic(name,color,size){size=size||14;return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="${color||'#cbd5e1'}" aria-hidden="true"><path d="${PATHS[name]}"/></svg>`;}
+function ic(name,color,size){size=size||19;return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="${color||'#cbd5e1'}" aria-hidden="true" style="vertical-align:-3px"><path d="${PATHS[name]}"/></svg>`;}
 function chip(name,color,num){return `<span class="chip">${ic(name,color)}${num!=null?`<b>${num}</b>`:""}</span>`;}
 function actName(t){return t==="move"?"boot":"sword";}        // attack→劍, move→靴
 function actChip(action,color){
@@ -717,9 +760,11 @@ function buildLegend(){
   el.innerHTML=L.map(s=>`<span class="chip">${s}</span>`).join("");
 }
 function newGame(seed){
-  g=new DOEGame.WebGame(seed||((Math.random()*1e9)|0),"DOE-D01");
+  g=new DOEGame.WebGame(seed||((Math.random()*1e9)|0),"Red Dragon");
   g.start();
-  ui={sel:{s:null,e:null,b:null},bt:"attack",dpicks:[],upicks:[],logLen:0};
+  ui={sel:{s:null,e:null,b:null},bt:"attack",fuse:false,diverting:false,
+      dpicks:[],upicks:[],upSpent:0,upLevels:[],flash:null,regroup:false,
+      fsel:{sets:[{s:null,e:null,b:null},{s:null,e:null,b:null}]}};
   buildLegend();
   render();
 }
@@ -747,9 +792,7 @@ function cardHTML(c,i,opts){
   const cls=EL[c.cardElement];
   const sel=opts.sel?"sel":"";
   const L=c.level, flipL=(L%2===1)?L+1:L-1;       // 同一面 180° 翻面的相鄰等級
-  let pop="";
-  if(opts.role && {s:1,e:1,b:1}[opts.role])
-    pop=`<div class="rolepop rp-${opts.role}">${{s:"Spell",e:"Element",b:"Boost"}[opts.role]}</div>`;
+  const pop=opts.pop?`<div class="rolepop ${opts.pop.cls}">${opts.pop.text}</div>`:"";
   return `<div class="card ${cls} ${sel}" data-i="${i}">
     <div class="cardname">${nameInner(c,L)}</div>
     <div class="face">
@@ -760,11 +803,9 @@ function cardHTML(c,i,opts){
     ${pop}
   </div>`;
 }
-function handHTML(roleOf){
-  return `<div class="row">`+g.hand.map((c,i)=>cardHTML(c,i,{role:roleOf?roleOf(i):null,sel:roleOf?false:isSel(i)})).join("")+`</div>`;
+function handHTML(popOf,selOf){
+  return `<div class="row">`+g.hand.map((c,i)=>cardHTML(c,i,{pop:popOf?popOf(i):null,sel:selOf?selOf(i):false})).join("")+`</div>`;
 }
-function isSel(i){return i===ui.sel.s||i===ui.sel.e||i===ui.sel.b;}
-function roleOfIdx(i){if(i===ui.sel.s)return"s";if(i===ui.sel.e)return"e";if(i===ui.sel.b)return"b";return null;}
 
 function encHTML(){
   const e=g.enc, t=e.target;
@@ -810,55 +851,107 @@ function phaseName(){return {challenge:"挑戰",action:"行動",penalty:"懲罰"
 function viewFor(){
   switch(g.phase){
     case "challenge": return encHTML()+`<div class="btns">
-        <button class="primary" onclick="act('面對')">面對</button>
+        <button class="primary" onclick="act()">面對</button>
         <button class="ghost" onclick="startDivert()" ${g.divertsLeft>0?"":"disabled"}>繞道 (${g.divertsLeft})</button>
       </div>`+(ui.diverting?`<h2>選一張手牌一起棄掉</h2>`+handHTML():"");
     case "action": {
       const enemy=g.enc.encType==="enemy";
-      return encHTML()+`<h2>指派角色（法/元/B），其餘為預備</h2>`+handHTML(roleOfIdx)+
+      return encHTML()+`<h2>指派角色（點卡→Spell/Element/Boost），其餘為預備</h2>`+handHTML(actionPop)+
         `<div class="btns">${enemy?`<div class="toggle">
             <button class="${ui.bt==='attack'?'on':''}" onclick="ui.bt='attack';render()">Boost→攻擊</button>
             <button class="${ui.bt==='initiative'?'on':''}" onclick="ui.bt='initiative';render()">Boost→先攻</button>
           </div>`:""}</div>
         <div class="btns">
+          <button class="${ui.fuse?'warn':'ghost'}" onclick="toggleFuse()">融合${ui.fuse?'✓':''}</button>
           <button class="ghost" onclick="suggest()">建議</button>
-          <button class="ghost" onclick="ui.sel={s:null,e:null,b:null};render()">清除</button>
+          <button class="ghost" onclick="clearSel()">清除</button>
           <button class="primary" onclick="confirmAction()" ${ui.sel.s!=null?"":"disabled"}>確定行動</button>
-        </div>`;
+        </div>
+        ${ui.fuse?`<div class="muted">融合：Element 視為萬用→本回合強化必中；代價是 4 張全棄、不留預備。</div>`:""}`;
     }
-    case "penalty": {
-      const r=g.tx.r;
-      return `<div class="banner">結算：<b>${r.outcome}</b>　XP ${r.xp}　時間懲罰 ${r.timePenalty}　傷害 ${g.tx.dmg}</div>
-        ${(g.tx.dmg>0||r.timePenalty>0)?`<div class="muted">懲罰階段：時間懲罰先棄牌，傷害用降級手牌吸收。</div>`:""}
-        <div class="btns"><button class="primary" onclick="doPenalty()">結算懲罰</button></div>`;
-    }
-    case "upgrade": {
-      const xp=g.tx.r.xp;
-      if(xp<=0) return `<div class="banner">沒有 XP，直接清理。</div>
-        <div class="btns"><button class="primary" onclick="g.applyUpgrade([]);afterTurn()">繼續</button></div>`;
-      return `<div class="banner">升級階段：可用 XP <b>${xp}</b></div>`+handHTML()+
-        `<div class="muted">已選升級：${ui.upicks.map(i=>g.hand[i]?g.hand[i].name:'?').join("、")||"無"}</div>
-        <div class="btns">
-          <button class="ghost" onclick="suggestUpgrade()">建議</button>
-          <button class="ghost" onclick="ui.upicks=[];render()">清除</button>
-          <button class="primary" onclick="g.applyUpgrade(ui.upicks);afterTurn()">完成升級</button>
-        </div>`;
-    }
-    case "final_journey_intro":
-      return dragonHTML()+`<h2>最終旅程：手牌 7 張（系統自動配置兩組行動）</h2>`+handHTML()+
-        `<div class="btns">
-           <button class="warn" onclick="startRegroup()">Regroup 棄1重抽</button>
-           <button class="primary" onclick="g.finalJourney(null);afterFinal()">開始最終旅程</button>
-         </div>`+(ui.regroup?`<h2>選一張棄掉並重抽</h2>`+handHTML(()=>null):"");
-    case "final_enemy_intro":
-      return dragonHTML()+`<h2>最終敵人：用剩餘 ${g.hand.length} 張結算</h2>`+handHTML(()=>null)+
-        `<div class="btns"><button class="primary" onclick="g.finalEnemy();afterFinal()">結算最終敵人</button></div>`;
+    case "penalty": return penaltyView();
+    case "upgrade": return upgradeView();
+    case "final_journey_intro": return finalView("journey");
+    case "final_enemy_intro": return finalView("enemy");
     case "gameover":
       return `<div class="end"><div class="big">${g.result.win?"🏆 勝利！":"💀 失敗"}</div>
         <div>分數：<b>${g.result.score}</b></div>
         <div class="btns" style="margin-top:18px"><button class="primary" onclick="newGame()">再玩一局</button></div></div>`;
   }
   return "";
+}
+function actionPop(i){
+  const s=ui.sel;
+  if(i===s.s) return {text:"Spell",cls:"rp-s"};
+  if(i===s.e) return {text:"Element",cls:"rp-e"};
+  if(i===s.b) return {text:"Boost",cls:"rp-b"};
+  return null;
+}
+// ---- #1 懲罰：手動選牌擋傷害 ----
+function soakOf(i){const c=g.hand[i];if(!c)return 0;const lv=c.levels[c.level];let s=lv.armorValue;
+  if(lv.armorElement&&g.tx.atkEl&&lv.armorElement===g.tx.atkEl)s*=2;return s;}
+function penTotal(){const r=g.tx.r,tp=r.timePenalty;
+  const shortfall=Math.max(0,tp-g.deck.length);
+  const storm=(g.enc.hardships.includes("storm")&&tp>0)?tp:0;
+  return g.tx.dmg+shortfall+storm;}
+function penaltyPop(i){return ui.dpicks.includes(i)?{text:"−"+soakOf(i),cls:"rp-dmg"}:null;}
+function penaltyView(){
+  const r=g.tx.r,total=penTotal();
+  const head=`<div class="banner">結算：<b>${r.outcome}</b>　XP ${r.xp}　時間懲罰 ${r.timePenalty}　傷害 ${g.tx.dmg}</div>`;
+  if(total<=0) return head+`<div class="muted">${r.timePenalty?`時間懲罰：從牌庫棄 ${Math.min(r.timePenalty,g.deck.length)} 張。`:''}沒有傷害需要吸收。</div>
+    <div class="btns"><button class="primary" onclick="doPenaltyAuto()">繼續</button></div>`;
+  const soaked=ui.dpicks.reduce((s,i)=>s+soakOf(i),0);
+  const remaining=Math.max(0,total-soaked);
+  const noMore=g.hand.every((_,i)=>ui.dpicks.includes(i));
+  const can=remaining<=0||noMore;
+  return head+`<div class="banner">需吸收 <b>${total}</b> ${g.tx.atkEl?ic(g.tx.atkEl,elc(g.tx.atkEl),16):''}　剩餘 <b>${remaining}</b></div>
+    <div class="muted">點手牌降級吸收（盾值；元素相符雙倍）。剩餘歸 0 即可；吸不完則被擊倒。</div>
+    ${handHTML(penaltyPop)}
+    <div class="btns">
+      <button class="ghost" onclick="ui.dpicks=[];render()">清除</button>
+      <button class="ghost" onclick="doPenaltyAuto()">自動吸收</button>
+      <button class="primary" ${can?'':'disabled'} onclick="doPenaltyConfirm()">確定</button>
+    </div>`;
+}
+// ---- #2 升級：彈窗 + XP 扣抵 ----
+function upgradePop(i){
+  if(ui.flash&&ui.flash.idx===i) return {text:ui.flash.text,cls:ui.flash.cls};
+  return ui.upicks.includes(i)?{text:"Selected →L"+ui.upLevels[i],cls:"rp-up"}:null;
+}
+function upgradeView(){
+  const xp=g.tx.r.xp;
+  if(xp<=0) return `<div class="banner">沒有 XP，直接清理。</div>
+    <div class="btns"><button class="primary" onclick="finishUpgrade([])">繼續</button></div>`;
+  const remaining=xp-ui.upSpent;
+  return `<div class="banner">升級階段：可用 XP <b>${remaining}</b> / ${xp}</div>
+    <div class="muted">點手牌升級（扣 XP；不夠會提示 No XP）。已升 ${ui.upicks.length} 次</div>
+    ${handHTML(upgradePop)}
+    <div class="btns">
+      <button class="ghost" onclick="suggestUpgrade()">建議</button>
+      <button class="ghost" onclick="clearUpgrade()">清除</button>
+      <button class="primary" onclick="finishUpgrade(ui.upicks)">完成升級</button>
+    </div>`;
+}
+// ---- #3 龍戰：手動兩組 ----
+function finalSlotOf(i){const S=ui.fsel.sets;
+  for(let k=0;k<2;k++){if(S[k].s===i)return[k,"法"];if(S[k].e===i)return[k,"元"];if(S[k].b===i)return[k,"B"];}
+  return null;}
+function finalPop(i){const r=finalSlotOf(i);if(!r)return null;
+  return {text:"組"+(r[0]+1)+"·"+r[1],cls:r[0]===0?"rp-s":"rp-e"};}
+function finalView(kind){
+  const isJ=kind==="journey";
+  const ready=ui.fsel.sets.some(s=>s.s!=null);
+  if(ui.regroup) return dragonHTML()+`<h2>選一張棄掉並重抽 7 張</h2>`+handHTML();
+  return dragonHTML()
+    +`<h2>${isJ?"最終旅程：組兩組行動（求移動）":"最終敵人：組兩組行動（求攻擊）"}</h2>`
+    +`<div class="muted">點卡片循環指派：組1法→組1元→組1B→組2法→組2元→組2B→取消</div>`
+    +handHTML(finalPop)
+    +`<div class="btns">
+        ${(isJ&&!g.regroupUsed)?`<button class="warn" onclick="startRegroup()">Regroup</button>`:""}
+        <button class="ghost" onclick="suggestFinal('${kind}')">建議</button>
+        <button class="ghost" onclick="clearFinal()">清除</button>
+        <button class="primary" ${ready?'':'disabled'} onclick="confirmFinal('${kind}')">確定結算</button>
+      </div>`;
 }
 function dragonHTML(){
   const d=g.dragon;
@@ -887,41 +980,84 @@ function cardTap(i){
     render();
   } else if(g.phase==="challenge" && ui.diverting){
     g.divert(i); ui.diverting=false; render();
+  } else if(g.phase==="penalty"){
+    if(penTotal()>0 && !ui.dpicks.includes(i)) ui.dpicks.push(i); render();
   } else if(g.phase==="upgrade"){
-    ui.upicks.push(i); render();
-  } else if(g.phase==="final_journey_intro" && ui.regroup){
-    ui.regroup=false; g.finalJourney(i); afterFinal();
+    tryUpgrade(i);
+  } else if(g.phase==="final_journey_intro"||g.phase==="final_enemy_intro"){
+    if(ui.regroup){ ui.regroup=false; g.regroup(i); resetFinalSel(); afterFinal(); return; }
+    cycleFinal(i); render();
   }
 }
-function act(){ g.toAction(); render(); }
+function act(){ ui.sel={s:null,e:null,b:null}; ui.fuse=false; g.toAction(); render(); }
 function startDivert(){ ui.diverting=true; render(); }
+function toggleFuse(){ ui.fuse=!ui.fuse; render(); }
+function clearSel(){ ui.sel={s:null,e:null,b:null}; render(); }
 function suggest(){
   const [s,e,b,t]=DOEGame.bestAssignment(g.hand,g.enc.encType,g.enc.target);
   ui.sel={s,e:e,b:b}; if(g.enc.encType==="enemy")ui.bt=t==="initiative"?"initiative":"attack"; render();
 }
 function confirmAction(){
-  const s=ui.sel;
-  const enemy=g.enc.encType==="enemy";
-  const a={s:s.s,e:s.e,b:s.b,t:enemy?ui.bt:"move",negateRanged:g.enc.target.ability==="ranged"};
+  const s=ui.sel; const enemy=g.enc.encType==="enemy";
+  const a={s:s.s,e:s.e,b:s.b,t:enemy?ui.bt:"move",negateRanged:g.enc.target.ability==="ranged",fuse:ui.fuse};
   g.resolveAction(a);
-  ui.sel={s:null,e:null,b:null};
+  ui.sel={s:null,e:null,b:null}; ui.fuse=false; ui.dpicks=[];
   render();
 }
-function doPenalty(){ g.applyPenalty(null); ui.upicks=[]; render(); }
-function afterTurn(){ render(); }   // applyUpgrade 內部已 cleanup 並前進
-function suggestUpgrade(){ ui.upicks=DOEGame.chooseUpgrades(g.hand,g.tx.r.xp); render(); }
+// 懲罰
+function initUpgrade(){ ui.upicks=[]; ui.upSpent=0; ui.upLevels=g.hand.map(c=>c.level); }
+function doPenaltyAuto(){ g.applyPenalty(null); initUpgrade(); render(); }
+function doPenaltyConfirm(){ g.applyPenalty(ui.dpicks); initUpgrade(); render(); }
+// 升級
+function flash(idx,text,cls){ ui.flash={idx,text,cls}; render();
+  setTimeout(()=>{ if(ui.flash&&ui.flash.idx===idx){ ui.flash=null; render(); } },1000); }
+function tryUpgrade(i){
+  const cur=ui.upLevels[i];
+  if(cur>=4){ flash(i,"已滿級","rp-warn"); return; }
+  const cost=g.hand[i].levels[cur].upgradeCost;
+  const remaining=g.tx.r.xp-ui.upSpent;
+  if(cost<=remaining){ ui.upicks.push(i); ui.upSpent+=cost; ui.upLevels[i]++; render(); }
+  else{ flash(i,"No XP","rp-warn"); }
+}
+function suggestUpgrade(){ clearUpgrade(); for(const i of DOEGame.chooseUpgrades(g.hand,g.tx.r.xp)) tryUpgrade(i); }
+function clearUpgrade(){ initUpgrade(); render(); }
+function finishUpgrade(picks){ g.applyUpgrade(picks); afterTurn(); }
+function afterTurn(){ if(g.phase==="penalty") ui.dpicks=[]; render(); }
+// 最終戰
+function resetFinalSel(){ ui.fsel={sets:[{s:null,e:null,b:null},{s:null,e:null,b:null}]}; }
+function cycleFinal(i){
+  const S=ui.fsel.sets, slots=[[0,'s'],[0,'e'],[0,'b'],[1,'s'],[1,'e'],[1,'b']];
+  for(const [k,key] of slots){ if(S[k][key]===i){ S[k][key]=null; return; } }
+  for(const [k,key] of slots){ if(S[k][key]==null){ S[k][key]=i; return; } }
+}
+function suggestFinal(kind){
+  const r=DOEGame.makeTwoSetsIdx(g.hand, kind==="journey"?"move":"attack");
+  resetFinalSel();
+  r.sets.forEach((st,k)=>{ ui.fsel.sets[k]={s:st.s,e:st.e==null?null:st.e,b:st.b==null?null:st.b}; });
+  render();
+}
+function clearFinal(){ resetFinalSel(); render(); }
 function startRegroup(){ ui.regroup=true; render(); }
+function confirmFinal(kind){
+  const t=kind==="journey"?"move":"attack";
+  const sets=ui.fsel.sets.filter(s=>s.s!=null).map(s=>({s:s.s,e:s.e,b:s.b,t}));
+  const used=new Set(); ui.fsel.sets.forEach(s=>[s.s,s.e,s.b].forEach(x=>{if(x!=null)used.add(x);}));
+  let reserveIdx=null; for(let i=0;i<g.hand.length;i++) if(!used.has(i)){ reserveIdx=i; break; }
+  if(kind==="journey"){ g.finalJourneyResolve({sets,reserveIdx}); resetFinalSel(); }
+  else { g.finalEnemyResolve({sets,reserveIdx}); }
+  afterFinal();
+}
 function afterFinal(){ render(); }
 
 function setHint(){
   const h=document.getElementById("hint");
   const map={
     challenge:"面對遭遇，或繞道（棄關鍵卡+1手牌）",
-    action:"點卡片指派：第1下法術、第2下元素、第3下Boost；其餘為預備",
-    penalty:"點「結算懲罰」處理時間懲罰與傷害",
-    upgrade:"點手牌升級（可重複），或用建議",
-    final_journey_intro:"最終旅程：兩組行動自動配置；可先 Regroup",
-    final_enemy_intro:"用剩餘手牌對龍做最後一擊",
+    action:"點卡片指派 Spell/Element/Boost；融合=強化必中但4張全棄",
+    penalty:"點手牌降級吸收傷害（剩餘歸0），或自動吸收",
+    upgrade:"點手牌升級（扣XP，不夠會提示）；或用建議",
+    final_journey_intro:"循環點卡指派兩組行動（求移動），可先 Regroup",
+    final_enemy_intro:"循環點卡指派兩組行動（求攻擊），對龍最後一擊",
     gameover:"看看分數，再玩一局！",
   };
   h.textContent=map[g.phase]||"";
