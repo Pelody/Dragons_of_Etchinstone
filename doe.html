@@ -20,11 +20,12 @@
   .row{display:flex;flex-wrap:wrap;gap:8px}
   .card{position:relative;flex:1 1 calc(50% - 8px);min-width:150px;background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:8px 10px}
   .card.sel{outline:2px solid #6ee7ff;background:var(--panel2)}
-  .face{display:flex;gap:6px;margin-top:4px}
+  .card.isback{outline:2px dashed #f59e0baa}
+  .face{display:flex;gap:6px;margin-top:2px}
   .half{flex:1;min-width:0}
   .half.flip{transform:rotate(180deg)}
-  .cardname{font-size:16px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;margin:2px 1px 6px}
-  .cardname.flip{transform:rotate(180deg);margin:6px 1px 2px}
+  .cardname{font-size:16px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;margin:1px 1px 3px}
+  .cardname.flip{transform:rotate(180deg);margin:3px 1px 1px}
   .cardname .cn{overflow:hidden;text-overflow:ellipsis}
   .lvtag{background:#000a;border-radius:6px;padding:1px 6px;font-size:13px;flex:none}
   .rolepop{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#0b0e18f2;border:1px solid #fff3;border-radius:9px;padding:3px 10px;font-size:16px;font-weight:700;z-index:4;pointer-events:none;letter-spacing:.3px;white-space:nowrap}
@@ -34,7 +35,7 @@
   .rp-dmg{color:#fca5a5;border-color:#ef4444}
   .rp-up{color:#34d399;border-color:#34d399}
   .rp-warn{color:#fca5a5;border-color:#ef4444}
-  .r{display:flex;align-items:center;gap:6px;font-size:19px;margin:6px 0}
+  .r{display:flex;align-items:center;gap:5px;font-size:19px;margin:3px 0}
   .r b{font-weight:700}
   .card .nm{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
   .chips{display:flex;flex-wrap:wrap;gap:5px 9px;margin-top:6px}
@@ -762,7 +763,7 @@ function buildLegend(){
 function newGame(seed){
   g=new DOEGame.WebGame(seed||((Math.random()*1e9)|0),"Red Dragon");
   g.start();
-  ui={sel:{s:null,e:null,b:null},bt:"attack",fuse:false,diverting:false,
+  ui={sel:{s:null,e:null,b:null},bt:"attack",fuse:false,diverting:false,flipped:false,
       dpicks:[],upicks:[],upSpent:0,upLevels:[],flash:null,regroup:false,
       fsel:{sets:[{s:null,e:null,b:null},{s:null,e:null,b:null}]}};
   buildLegend();
@@ -787,19 +788,24 @@ function statsHTML(c,L){
 function nameInner(c,L){
   return `<span class="lvtag">L${L}</span>${ic(c.cardElement,elc(c.cardElement),18)} <span class="cn">${c.name}</span>`;
 }
+function partnerL(L){return (L%2===1)?L+1:L-1;}     // 同一面 180° 翻面的相鄰等級
+function cardLevels(c){                               // [上半等級, 下半等級]
+  if(ui.flipped) return (c.level<=2)?[3,4]:[1,2];     // 翻到背面：看另外兩個等級
+  return [c.level, partnerL(c.level)];                // 正面：現值 + 相鄰等級
+}
 function cardHTML(c,i,opts){
   opts=opts||{};
   const cls=EL[c.cardElement];
   const sel=opts.sel?"sel":"";
-  const L=c.level, flipL=(L%2===1)?L+1:L-1;       // 同一面 180° 翻面的相鄰等級
+  const [topL,botL]=cardLevels(c);
   const pop=opts.pop?`<div class="rolepop ${opts.pop.cls}">${opts.pop.text}</div>`:"";
-  return `<div class="card ${cls} ${sel}" data-i="${i}">
-    <div class="cardname">${nameInner(c,L)}</div>
+  return `<div class="card ${cls} ${sel}${ui.flipped?' isback':''}" data-i="${i}">
+    <div class="cardname">${nameInner(c,topL)}</div>
     <div class="face">
-      <div class="half">${statsHTML(c,L)}</div>
-      <div class="half flip">${statsHTML(c,flipL)}</div>
+      <div class="half">${statsHTML(c,topL)}</div>
+      <div class="half flip">${statsHTML(c,botL)}</div>
     </div>
-    <div class="cardname flip">${nameInner(c,flipL)}</div>
+    <div class="cardname flip">${nameInner(c,botL)}</div>
     ${pop}
   </div>`;
 }
@@ -863,6 +869,7 @@ function viewFor(){
           </div>`:""}</div>
         <div class="btns">
           <button class="${ui.fuse?'warn':'ghost'}" onclick="toggleFuse()">融合${ui.fuse?'✓':''}</button>
+          ${flipBtn()}
           <button class="ghost" onclick="suggest()">建議</button>
           <button class="ghost" onclick="clearSel()">清除</button>
           <button class="primary" onclick="confirmAction()" ${ui.sel.s!=null?"":"disabled"}>確定行動</button>
@@ -880,6 +887,7 @@ function viewFor(){
   }
   return "";
 }
+function flipBtn(){return `<button class="ghost" onclick="toggleFlipAll()">${ui.flipped?'↩ 翻回正面(才能選)':'🔄 翻面看 L3/L4'}</button>`;}
 function actionPop(i){
   const s=ui.sel;
   if(i===s.s) return {text:"Spell",cls:"rp-s"};
@@ -904,10 +912,12 @@ function penaltyView(){
   const remaining=Math.max(0,total-soaked);
   const noMore=g.hand.every((_,i)=>ui.dpicks.includes(i));
   const can=remaining<=0||noMore;
-  return head+`<div class="banner">需吸收 <b>${total}</b> ${g.tx.atkEl?ic(g.tx.atkEl,elc(g.tx.atkEl),16):''}　剩餘 <b>${remaining}</b></div>
-    <div class="muted">點手牌降級吸收（盾值；元素相符雙倍）。剩餘歸 0 即可；吸不完則被擊倒。</div>
+  const elIco=g.tx.atkEl?ic(g.tx.atkEl,elc(g.tx.atkEl),18):'';
+  return head+`<div class="banner">${elIco} 還需吸收 <b style="font-size:1.5em;color:#fca5a5">${remaining}</b> <span class="muted">／ 共 ${total}</span></div>
+    <div class="muted">點手牌降級吸收（盾值；元素相符雙倍）。歸 0 後不能再選；吸不完則被擊倒。</div>
     ${handHTML(penaltyPop)}
     <div class="btns">
+      ${flipBtn()}
       <button class="ghost" onclick="ui.dpicks=[];render()">清除</button>
       <button class="ghost" onclick="doPenaltyAuto()">自動吸收</button>
       <button class="primary" ${can?'':'disabled'} onclick="doPenaltyConfirm()">確定</button>
@@ -927,6 +937,7 @@ function upgradeView(){
     <div class="muted">點手牌升級（扣 XP；不夠會提示 No XP）。已升 ${ui.upicks.length} 次</div>
     ${handHTML(upgradePop)}
     <div class="btns">
+      ${flipBtn()}
       <button class="ghost" onclick="suggestUpgrade()">建議</button>
       <button class="ghost" onclick="clearUpgrade()">清除</button>
       <button class="primary" onclick="finishUpgrade(ui.upicks)">完成升級</button>
@@ -948,6 +959,7 @@ function finalView(kind){
     +handHTML(finalPop)
     +`<div class="btns">
         ${(isJ&&!g.regroupUsed)?`<button class="warn" onclick="startRegroup()">Regroup</button>`:""}
+        ${flipBtn()}
         <button class="ghost" onclick="suggestFinal('${kind}')">建議</button>
         <button class="ghost" onclick="clearFinal()">清除</button>
         <button class="primary" ${ready?'':'disabled'} onclick="confirmFinal('${kind}')">確定結算</button>
@@ -972,7 +984,9 @@ function bindCards(){
     el.onclick=()=>cardTap(parseInt(el.dataset.i,10));
   });
 }
+function toggleFlipAll(){ ui.flipped=!ui.flipped; render(); }
 function cardTap(i){
+  if(ui.flipped){ return; }   // 背面只供檢視，要選請先翻回正面
   if(g.phase==="action"){
     const s=ui.sel;
     if(i===s.s){s.s=null;} else if(i===s.e){s.e=null;} else if(i===s.b){s.b=null;}
@@ -981,7 +995,10 @@ function cardTap(i){
   } else if(g.phase==="challenge" && ui.diverting){
     g.divert(i); ui.diverting=false; render();
   } else if(g.phase==="penalty"){
-    if(penTotal()>0 && !ui.dpicks.includes(i)) ui.dpicks.push(i); render();
+    const total=penTotal();
+    const soaked=ui.dpicks.reduce((s,j)=>s+soakOf(j),0);
+    if(total>0 && (total-soaked)>0 && !ui.dpicks.includes(i)) ui.dpicks.push(i);  // 吸滿後不能再選
+    render();
   } else if(g.phase==="upgrade"){
     tryUpgrade(i);
   } else if(g.phase==="final_journey_intro"||g.phase==="final_enemy_intro"){
@@ -989,7 +1006,7 @@ function cardTap(i){
     cycleFinal(i); render();
   }
 }
-function act(){ ui.sel={s:null,e:null,b:null}; ui.fuse=false; g.toAction(); render(); }
+function act(){ ui.sel={s:null,e:null,b:null}; ui.fuse=false; ui.flipped=false; g.toAction(); render(); }
 function startDivert(){ ui.diverting=true; render(); }
 function toggleFuse(){ ui.fuse=!ui.fuse; render(); }
 function clearSel(){ ui.sel={s:null,e:null,b:null}; render(); }
@@ -1005,7 +1022,7 @@ function confirmAction(){
   render();
 }
 // 懲罰
-function initUpgrade(){ ui.upicks=[]; ui.upSpent=0; ui.upLevels=g.hand.map(c=>c.level); }
+function initUpgrade(){ ui.upicks=[]; ui.upSpent=0; ui.upLevels=g.hand.map(c=>c.level); ui.flipped=false; }
 function doPenaltyAuto(){ g.applyPenalty(null); initUpgrade(); render(); }
 function doPenaltyConfirm(){ g.applyPenalty(ui.dpicks); initUpgrade(); render(); }
 // 升級
