@@ -517,8 +517,8 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:10px;
-    margin-bottom:10px;
+    text-align:center;
+    margin-bottom:12px;
   }
   .boss-name{
     font-size:27px;
@@ -526,7 +526,6 @@
     letter-spacing:.01em;
     color:var(--txt);
     line-height:1.05;
-    text-align:center;
   }
   .boss-stage{
     color:var(--muted);
@@ -608,16 +607,22 @@
     font-weight:850;
   }
   .boss-mp-values .chip,
-  .boss-hp-values .chip,
-  .boss-stat-value .chip{
+  .boss-hp-values .chip{
     font-size:15px;
     gap:2px;
   }
   .boss-mp-values svg,
-  .boss-hp-values svg,
-  .boss-stat-value svg{
+  .boss-hp-values svg{
     width:15px;
     height:15px;
+  }
+  .boss-stat-value .chip{
+    font-size:16px;
+    gap:3px;
+  }
+  .boss-stat-value svg{
+    width:16px;
+    height:16px;
   }
   .boss-bottom-stats{
     position:absolute;
@@ -630,7 +635,7 @@
     z-index:4;
   }
   .boss-stat-card{
-    min-height:34px;
+    min-height:32px;
     border-radius:12px;
     border:1px solid var(--line);
     background:linear-gradient(180deg,#1b2131f2,#101623f2);
@@ -645,7 +650,7 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:6px;
+    gap:5px;
     font-size:16px;
     font-weight:850;
     flex-wrap:wrap;
@@ -2279,13 +2284,29 @@ function finalSlotOf(i){const S=ui.fsel.sets;
   return null;}
 function finalPop(i){const r=finalSlotOf(i);if(!r)return null;
   return {text:`${r.role} ${r.set}`,cls:r.cls};}
+function finalPhaseHeaderHTML(kind){
+  const d=g.dragon;
+  const init=chip("init","#cbd5e1",d.initiative);
+  const early=chip("sword",elc(d.earlyDamage.element),d.earlyDamage.value);
+  const arm=d.armor.map(a=>chip("shield",elc(a.element),a.value)).join("");
+  if(kind==="journey"){
+    const tiers=d.mpTiers.map(t=>`<span class="tier">${chip("mountain",elc(t[1]),t[0])}${chip("hourglass","#cbd5e1",t[2])}</span>`).join("");
+    return `<div class="enc"><div class="enc-mini-title">${ic("mountain","#ffffff",15)}<span>Final Journey</span></div>
+      <div class="chips big">${tiers}</div>
+      <div class="chips big" style="margin-top:8px">${init}</div></div>`;
+  }
+  const tiers=d.hpTiers.map(t=>`<span class="tier">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</span>`).join("");
+  return `<div class="enc"><div class="enc-mini-title">${ic("skull","#ffffff",15)}<span>Final Enemy</span></div>
+    <div class="chips big">${tiers}</div>
+    <div class="chips big" style="margin-top:8px">${init}${early}${arm}</div></div>`;
+}
 function finalView(kind){
   const isJ=kind==="journey";
   const ready=ui.fsel.sets.some(s=>s.s!=null);
-  if(ui.regroup) return dragonHTML()+`<h2>選一張棄掉並重抽 7 張</h2>`+handHTML();
-  return dragonHTML()
-    +`<h2>${isJ?"最終旅程：組兩組行動（求移動）":"最終敵人：組兩組行動（求攻擊）"}</h2>`
-    +`<div class="muted">點卡片循環指派：Spell 1 → Element 1 → Boost 1 → Spell 2 → Element 2 → Boost 2 → 取消</div>`
+  if(ui.regroup) return finalPhaseHeaderHTML(kind)+`<h2>選一張棄掉並重抽 7 張</h2>`+handHTML();
+  const phaseNote=isJ?"點卡片循環指派兩組行動（求移動）。":"點卡片循環指派兩組行動（求攻擊）。";
+  return finalPhaseHeaderHTML(kind)
+    +`<div class="phase-note">${phaseNote} Spell 1 → Element 1 → Boost 1 → Spell 2 → Element 2 → Boost 2 → 取消</div>`
     +handHTML(finalPop)
     +`<div class="btns">
         ${flipBtn()}
