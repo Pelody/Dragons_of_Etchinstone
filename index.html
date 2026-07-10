@@ -1101,6 +1101,27 @@ body.challenge-mode #main .foe-stage{width:100%}
 .ap-tally{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
 .ap-tally .t{display:flex;align-items:center;gap:6px;background:#00000026;border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:15px;font-weight:800}
 .ap-tally .t.dmg{color:#fca5a5}.ap-tally .t.xp{color:#fcd34d}
+/* 融合彈窗 */
+.fuse-modal{width:min(400px,100%)}
+.fz-title{text-align:center;font-size:22px;font-weight:900;margin-bottom:2px}
+.fz-title span{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:2px;margin-left:6px}
+.fz-desc{text-align:center;font-size:12.5px;color:var(--muted);margin-bottom:12px;line-height:1.55}
+.fz-desc b{color:#c4b5fd}
+.fz-combine{display:flex;align-items:stretch;gap:8px;justify-content:center}
+.fz-card{flex:1 1 0;min-width:0;background:#00000026;border:1px solid var(--line);border-left:5px solid var(--line);border-radius:12px;padding:8px 10px}
+.fz-card.w{border-left-color:#3b82f6}.fz-card.f{border-left-color:#ef4444}.fz-card.l{border-left-color:#eab308}.fz-card.s{border-left-color:#a78bfa}
+.fz-card.empty{opacity:.45}
+.fz-role{font-size:10.5px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.fz-name{font-size:14px;font-weight:800;display:flex;align-items:center;gap:5px;min-width:0}
+.fz-name span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fz-name.muted span{color:var(--muted)}
+.fz-op{align-self:center;font-size:18px;font-weight:900;color:var(--muted);flex:0 0 auto}
+.fz-arrow{text-align:center;font-size:12px;color:var(--muted);margin:11px 0 8px}
+.fz-elems{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.fz-elem{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;border:1px solid var(--line);border-radius:12px;background:#00000018;color:var(--txt);font-size:13px;font-weight:800;min-height:0}
+.fz-elem.on{border-color:var(--ec);background:#ffffff12;box-shadow:0 0 0 2px var(--ec) inset}
+.fz-warn{text-align:center;color:#fbbf24;font-size:12.5px;margin-top:11px;line-height:1.4}
+.fz-ok{text-align:center;color:#86efac;font-size:12.5px;margin-top:11px}
 .ap-eff{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0 2px}
 .ap-eff .eff{display:inline-flex;align-items:center;gap:3px;font-size:14px;color:#dfe3f5;background:#00000026;border:1px solid var(--line);border-radius:9px;padding:4px 9px}
 .ap-eff .eff b{color:#fff;font-weight:800}
@@ -1118,9 +1139,10 @@ body.challenge-mode #main .foe-stage{width:100%}
 .ranged-toggle button{flex:0 0 auto;min-height:38px;padding:6px 12px;font-size:13px}
 /* 工具列＋攻擊按鈕同一排（不換行） */
 .action-controls.onebar{display:flex;flex-wrap:nowrap;gap:5px;align-items:stretch;margin-top:0}
-.action-controls.onebar .boost-switch{flex:0 0 auto;min-height:46px;padding:3px 4px}
-.action-controls.onebar .tb{flex:0 0 auto;min-height:46px;padding:8px 9px;font-size:13.5px}
-.action-controls.onebar .atk-inline{flex:1 1 auto;min-width:80px;min-height:46px;font-size:17px;letter-spacing:0}
+.action-controls.onebar .boost-switch{flex:0 0 auto;min-height:38px;padding:2px 4px}
+.action-controls.onebar .boost-switch button{min-height:30px;padding:4px 11px}
+.action-controls.onebar .tb{flex:0 0 auto;min-height:38px;padding:6px 9px;font-size:13.5px}
+.action-controls.onebar .atk-inline{flex:1 1 auto;min-width:80px;min-height:38px;padding:6px 12px;font-size:17px;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -2486,7 +2508,7 @@ function render(){
   document.getElementById("sub").textContent =
     g.phase==="gameover"?"結束":`地區 ${g.regionIdx>4?4:g.regionIdx} · ${phaseName()}`;
   document.getElementById("deckinfo").innerHTML = `牌庫 ${g.deck.length}<br>手牌 ${g.hand.length}`;
-  m.innerHTML = viewFor()+previewHTML()+handPreviewHTML()+divertModalHTML()+regroupModalHTML()+newGameModalHTML()+actionPreviewHTML()+finalPreviewHTML()+legendModalHTML();
+  m.innerHTML = viewFor()+previewHTML()+handPreviewHTML()+divertModalHTML()+regroupModalHTML()+newGameModalHTML()+actionPreviewHTML()+fuseModalHTML()+finalPreviewHTML()+legendModalHTML();
   // log removed from UI
   if(lg) lg.textContent = "";
   bindCards();
@@ -2653,12 +2675,11 @@ function viewFor(){
               <button class="${ui.bt==='attack'?'on':'ghost'}" onclick="ui.bt='attack';render()">攻</button>
               <button class="${ui.bt==='initiative'?'on':'ghost'}" onclick="ui.bt='initiative';render()">先</button>
             </div>`:""}
-            <button class="${ui.fuse?'warn':'ghost'} tb" onclick="toggleFuse()">融合${ui.fuse?'✓':''}</button>
+            <button class="${ui.fuse?'warn':'ghost'} tb" onclick="openFuseModal()">融合${ui.fuse?'✓':''}</button>
             <button class="ghost tb" onclick="suggest()">建議</button>
             <button class="ghost tb" onclick="clearSel()">清除</button>
             <button class="primary big-act atk-inline" onclick="openActionPreview()" ${ui.sel.s!=null?"":"disabled"}>${enemy?"⚔️ 攻擊":"🥾 前進"}</button>
           </div>
-          ${ui.fuse?actionFuseInfo():""}
         </div>`;
     }
     case "penalty": return penaltyView();
@@ -2686,17 +2707,47 @@ function elementButtons(current, fn){
   const labels={water:"水",fire:"火",lightning:"雷",shadow:"暗"};
   return `<div class="elem-row">${["water","fire","lightning","shadow"].map(e=>`<button class="${current===e?'on':'ghost'}" onclick="${fn}('${e}')">${ic(e,elc(e),14)} ${labels[e]}</button>`).join("")}</div>`;
 }
-function actionFuseInfo(){
-  if(!ui.fuse) return "";
+function actionFuseInfo(){ return ""; }
+/* ===== 融合彈窗（取代原本內嵌展開，避免撐出捲軸） ===== */
+function openFuseModal(){
+  if(ui.fuseElement==null && ui.sel.s!=null) ui.fuseElement=curLevel(g.hand[ui.sel.s]).enhanced.element;
+  ui.fuseModalOpen=true; render();
+}
+function closeFuseModal(){ ui.fuseModalOpen=false; render(); }
+function cancelFuse(){ ui.fuse=false; ui.fuseModalOpen=false; render(); }
+function confirmFuse(){ ui.fuse=true; ui.fuseModalOpen=false; render(); }
+function fuseModalHTML(){
+  if(!ui.fuseModalOpen) return "";
   const s=ui.sel;
   const roleIdx=new Set([s.s,s.e,s.b].filter(x=>x!=null));
   let reserveIdx=null; for(let i=0;i<g.hand.length;i++) if(!roleIdx.has(i)){ reserveIdx=i; break; }
-  const top=s.e!=null?g.hand[s.e]:null, bottom=reserveIdx!=null?g.hand[reserveIdx]:null;
+  const elemCard=s.e!=null?g.hand[s.e]:null;
+  const reserveCard=reserveIdx!=null?g.hand[reserveIdx]:null;
   const labels={water:"水",fire:"火",lightning:"雷",shadow:"暗"};
-  const note='融合：Element 卡 + 預備卡（同元素），再選新元素。';
-  let status='尚未湊齊 Element 卡與預備卡。';
-  if(top&&bottom) status=`目前：${top.name} + ${bottom.name} → ${labels[ui.fuseElement]||'未選'}`;
-  return `<div class="fuse-box"><div class="fuse-note">${note}</div><div class="fuse-now">${status}</div>${elementButtons(ui.fuseElement,'setFuseElement')}</div>`;
+  let valid=false, reason="";
+  if(!elemCard) reason="請先在手牌指派一張 Element 卡";
+  else if(!reserveCard) reason="沒有可用的預備卡（需留一張未指派）";
+  else if(elemCard.cardElement!==reserveCard.cardElement) reason=`兩張元素不同：${labels[elemCard.cardElement]} ≠ ${labels[reserveCard.cardElement]}`;
+  else if(!ui.fuseElement) reason="請選擇融合後的新元素";
+  else { const vf=DOEGame.validateFuse(g.hand,s.e,reserveIdx,ui.fuseElement); valid=vf.ok; if(!vf.ok) reason=vf.reason||"無法融合"; }
+  const fzCard=(c,role)=> c
+    ? `<div class="fz-card ${EL[c.cardElement]}"><div class="fz-role">${role}</div><div class="fz-name">${ic(c.cardElement,elc(c.cardElement),18)}<span>${shortName(c.name)}</span></div></div>`
+    : `<div class="fz-card empty"><div class="fz-role">${role}</div><div class="fz-name muted"><span>—</span></div></div>`;
+  return `<div class="preview-overlay" onclick="closeFuseModal()">
+    <div class="action-modal slim fuse-modal" onclick="event.stopPropagation()">
+      <div class="fz-title">融合 <span>FUSION</span></div>
+      <div class="fz-desc">把 <b>Element 卡</b> 與一張<b>同元素的預備卡</b>合體，強化攻擊改成你選的元素。</div>
+      <div class="fz-combine">
+        ${fzCard(elemCard,"Element 卡")}
+        <div class="fz-op">＋</div>
+        ${fzCard(reserveCard,"預備卡")}
+      </div>
+      <div class="fz-arrow">融合後 · 強化元素改為</div>
+      <div class="fz-elems">${["water","fire","lightning","shadow"].map(e=>`<button class="fz-elem ${ui.fuseElement===e?'on':''}" style="--ec:${elc(e)}" onclick="setFuseElement('${e}')">${ic(e,elc(e),24)}<span>${labels[e]}</span></button>`).join("")}</div>
+      ${!valid?`<div class="fz-warn">${reason}</div>`:`<div class="fz-ok">✓ 可融合：強化攻擊將以 <b style="color:${elc(ui.fuseElement)}">${labels[ui.fuseElement]}</b> 元素判定</div>`}
+      <div class="ap-buttons"><button class="ghost" onclick="cancelFuse()">${ui.fuse?'取消融合':'取消'}</button><button class="primary big-act" ${valid?'':'disabled'} onclick="confirmFuse()">確定融合</button></div>
+    </div>
+  </div>`;
 }
 // ---- #1 懲罰：手動選牌擋傷害 ----
 function soakOf(i){const c=g.hand[i];if(!c)return 0;const lv=c.levels[c.level];let s=lv.armorValue;
