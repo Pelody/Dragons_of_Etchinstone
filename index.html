@@ -1085,8 +1085,7 @@ button:active{transform:scale(.95)}
 .card.compact{min-height:0}
 .card.compact .card-head{padding-bottom:4px;min-height:0}
 .cs{display:grid;grid-template-columns:1fr 1fr;gap:3px 5px;margin-top:1px}
-.cs-item{display:flex;align-items:center;gap:5px;background:#00000022;border:1px solid #ffffff10;border-radius:7px;padding:2px 7px;min-height:24px;line-height:1}
-.cs-item .cl{color:var(--muted);font-size:10.5px;flex:1 1 auto;white-space:nowrap;overflow:hidden}
+.cs-item{display:flex;align-items:center;justify-content:center;gap:6px;background:#00000022;border:1px solid #ffffff10;border-radius:7px;padding:2px 7px;min-height:24px;line-height:1}
 .cs-item b{font-size:16px;font-weight:800;color:#fff;flex:0 0 auto}
 .cs-item svg,.cs-item .dual-icons{flex:0 0 auto}
 .cs-item.span2{grid-column:1 / -1}
@@ -1101,6 +1100,8 @@ body.challenge-mode #main .foe-stage{width:100%}
 .ap-tally .t{display:flex;align-items:center;gap:6px;background:#00000026;border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:15px;font-weight:800}
 .ap-tally .t.dmg{color:#fca5a5}.ap-tally .t.xp{color:#fcd34d}
 .ap-eff{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0 2px}
+.ap-eff .eff{display:inline-flex;align-items:center;gap:3px;font-size:14px;color:#dfe3f5;background:#00000026;border:1px solid var(--line);border-radius:9px;padding:4px 9px}
+.ap-eff .eff b{color:#fff;font-weight:800}
 /* 量表內的特殊效果明細 */
 .am-effects{margin-top:9px;border-top:1px dashed var(--line);padding-top:8px;display:flex;flex-direction:column;gap:3px}
 .am-eff-h{font-size:11px;color:var(--muted);font-weight:700;margin-bottom:1px}
@@ -2294,8 +2295,8 @@ function actIcon(action,color,size){
     ? `<span class="dual-icons">${ic("sword",color,size)}${ic("boot",color,size)}</span>`
     : ic(action.type==="move"?"boot":"sword",color,size);
 }
-function csItem(iconHTML,label,value,valColor,cls){
-  return `<div class="cs-item ${cls||''}">${iconHTML}<span class="cl">${label}</span><b${valColor?` style="color:${valColor}"`:''}>${value}</b></div>`;
+function csItem(iconHTML,value,valColor,cls){
+  return `<div class="cs-item ${cls||''}">${iconHTML}<b${valColor?` style="color:${valColor}"`:''}>${value}</b></div>`;
 }
 function cardStatsCompact(c,L){
   const lv=c.levels[L];
@@ -2303,13 +2304,13 @@ function cardStatsCompact(c,L){
   const enhC=elc(lv.enhanced.element);
   const h=normEffect(lv.hardship);
   const items=[
-    csItem(ic("init","#cbd5e1",15),"先攻",lv.initiative),
-    csItem(ic("boost","#86efac",15),"增益",`+${lv.boost}`),
-    csItem(actIcon(lv.basic,"#cbd5e1",15),"基礎",lv.basic.value),
-    csItem(actIcon(lv.enhanced,enhC,15),"強化",lv.enhanced.value,enhC),
-    csItem(ic("shield",armC,15),"護甲",lv.armorValue,armC,h?"":"span2")
+    csItem(ic("init","#cbd5e1",16),lv.initiative),
+    csItem(ic("boost","#86efac",16),`+${lv.boost}`),
+    csItem(actIcon(lv.basic,"#cbd5e1",16),lv.basic.value),
+    csItem(actIcon(lv.enhanced,enhC,16),lv.enhanced.value,enhC),
+    csItem(ic("shield",armC,16),lv.armorValue,armC,h?"":"span2")
   ];
-  if(h) items.push(`<div class="cs-item">${effectChip(h,{short:true,size:14})}<span class="cl">難關</span></div>`);
+  if(h) items.push(`<div class="cs-item cs-hard">${effectChip(h,{short:true,size:16})}</div>`);
   return `<div class="cs">${items.join("")}</div>`;
 }
 function shortName(name){
@@ -2631,8 +2632,6 @@ function liveMeterHTML(){
   return `<div class="atk-meter ${cls}">
     <div class="am-top"><span>${label} <b>${val}</b> <span style="color:var(--muted)">▸ 目標 ${need}</span></span><span class="am-out">${d.outcome}</span></div>
     <div class="am-track"><div class="am-fill" style="width:${pct}%"></div><div class="am-mark" style="left:${markPct}%"></div></div>
-    <div class="am-cap">未達 ${half} = 失敗　·　${half} 起 = 險勝　·　達 ${need} = 完全勝利</div>
-    <div class="am-conseq"><span class="xp">XP <b>+${d.xp||0}</b></span>${(d.damage||0)>0?`<span class="dmg">受傷 <b>${d.damage}</b></span>`:`<span>無傷</span>`}${d.effMini?`<span class="eff-sep"></span>${d.effMini}`:''}</div>
   </div>`;
 }
 function viewFor(){
@@ -2655,7 +2654,7 @@ function viewFor(){
             <button class="${ui.fuse?'warn':'ghost'} tb" onclick="toggleFuse()">融合${ui.fuse?'✓':''}</button>
             <button class="ghost tb" onclick="suggest()">建議</button>
             <button class="ghost tb" onclick="clearSel()">清除</button>
-            <button class="primary big-act atk-inline" onclick="doAttack()" ${ui.sel.s!=null?"":"disabled"}>${enemy?"⚔️ 攻擊":"🥾 前進"}</button>
+            <button class="primary big-act atk-inline" onclick="openActionPreview()" ${ui.sel.s!=null?"":"disabled"}>${enemy?"⚔️ 攻擊":"🥾 前進"}</button>
           </div>
           ${ui.fuse?actionFuseInfo():""}
         </div>`;
@@ -3229,13 +3228,12 @@ function actionPreviewHTML(){
     <div class="action-modal slim" onclick="event.stopPropagation()">
       <div class="ap-verdict ${vClass}">${d.outcome}</div>
       <div class="ap-tally">
-        <div class="t xp">${ic("star","#fcd34d",17)} XP +${d.xp}</div>
-        ${(d.damage||0)>0?`<div class="t dmg">${ic("heart","#fca5a5",17)} 受傷 ${d.damage}</div>`:`<div class="t">${ic("shield","#86efac",17)} 無傷</div>`}
-        ${(d.time||0)>0?`<div class="t">${ic("hourglass","#cbd5e1",17)} 時間 ${d.time}</div>`:''}
+        <div class="t xp">${ic("star","#fcd34d",18)} 經驗 +${d.xp||0}</div>
+        <div class="t dmg">${ic("heart","#fca5a5",18)} 傷害 ${d.damage||0}</div>
+        <div class="t">${ic("hourglass","#cbd5e1",18)} 時間 ${d.time||0}</div>
       </div>
-      ${effChips?`<div class="ap-eff">${effChips}</div>`:''}
-      ${rangedPreviewControl(p)}
-      <div class="ap-buttons"><button class="ghost" onclick="closeActionPreview()">取消</button><button class="primary big-act" onclick="executeActionPreview()">${isEnemy?"⚔️ 出手":"🥾 出發"}</button></div>
+      ${d.effMini?`<div class="ap-eff">${d.effMini}</div>`:''}
+      <div class="ap-buttons"><button class="ghost" onclick="closeActionPreview()">取消</button><button class="primary big-act" onclick="executeActionPreview()">確定</button></div>
     </div>
   </div>`;
 }
