@@ -11,7 +11,7 @@
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,"PingFang TC","Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.45}
-  #app{max-width:560px;margin:0 auto;padding:10px 10px 90px}
+  #app{max-width:560px;margin:0 auto;padding:10px 10px 12px}
   .top{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;position:static;margin-bottom:12px}
   .top b{font-size:18px;line-height:1.15;display:block;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top>div:first-child{flex:1 1 auto;min-width:0}
   .top-right{display:flex;align-items:center;gap:8px;flex:0 0 auto}
@@ -68,7 +68,7 @@
   button:disabled{opacity:.4}
   .toggle{display:flex;gap:6px}
   .toggle button.on{background:#22c55e;border-color:#22c55e;color:#042}
-  .action-toolbar{display:flex;flex-direction:column;gap:8px;margin:10px -10px 0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));position:sticky;bottom:0;z-index:6;background:linear-gradient(180deg,transparent,var(--bg) 26%)}
+  .action-toolbar{display:flex;flex-direction:column;gap:8px;margin:10px 0 0;padding:0 0 calc(4px + env(safe-area-inset-bottom))}
   .action-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .action-controls button{flex:0 0 auto;padding:10px 12px;min-height:42px}
   .boost-switch{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:4px 5px;background:#00000018;min-height:42px}
@@ -1082,10 +1082,12 @@ button:active{transform:scale(.95)}
 .am-conseq .eff b{color:#fff}
 .am-conseq .eff-sep{width:1px;height:13px;background:var(--line);margin:0 1px}
 /* 精簡卡片內排版（讓卡片變矮，行動畫面免下拉） */
-.card.compact{min-height:0}
-.card.compact .card-head{padding-bottom:4px;min-height:0}
-.cs{display:grid;grid-template-columns:1fr 1fr;gap:3px 5px;margin-top:1px}
-.cs-item{display:flex;align-items:center;justify-content:center;gap:6px;background:#00000022;border:1px solid #ffffff10;border-radius:7px;padding:2px 7px;min-height:24px;line-height:1}
+.card.compact{min-height:0;gap:4px;padding-top:7px;padding-bottom:7px}
+.card.compact .card-head{padding-bottom:5px;min-height:0}
+.cs{display:grid;grid-template-columns:1fr 1fr;gap:4px 5px;margin-top:0}
+.cs-item{display:flex;align-items:center;justify-content:center;gap:6px;background:#00000022;border:1px solid #ffffff10;border-radius:7px;padding:2px 7px;min-height:26px;line-height:1}
+.cs-item.cs-hard{background:none;border:none;padding:0}
+.cs-item.cs-hard .effect-chip{border-radius:8px;padding:3px 9px}
 .cs-item b{font-size:16px;font-weight:800;color:#fff;flex:0 0 auto}
 .cs-item svg,.cs-item .dual-icons{flex:0 0 auto}
 .cs-item.span2{grid-column:1 / -1}
