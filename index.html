@@ -68,7 +68,7 @@
   button:disabled{opacity:.4}
   .toggle{display:flex;gap:6px}
   .toggle button.on{background:#22c55e;border-color:#22c55e;color:#042}
-  .action-toolbar{display:flex;flex-direction:column;gap:8px;margin:10px 0 0;padding:0 0 calc(4px + env(safe-area-inset-bottom))}
+  .action-toolbar{display:flex;flex-direction:column;gap:8px;margin:8px 0 0;padding:0 0 calc(4px + env(safe-area-inset-bottom))}
   .action-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .action-controls button{flex:0 0 auto;padding:10px 12px;min-height:42px}
   .boost-switch{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:4px 5px;background:#00000018;min-height:42px}
@@ -1034,7 +1034,7 @@ button:active{transform:scale(.95)}
 .card{transition:box-shadow .15s ease}
 .card.sel{box-shadow:0 0 0 2px #6ee7ff,0 0 18px #6ee7ff88}
 /* ===== 戰鬥場景（呈現層，零邏輯改動） ===== */
-.foe-stage{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:6px 0 10px;background:linear-gradient(180deg,#222a40,#161b2b)}
+.foe-stage{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:6px 0 8px;background:linear-gradient(180deg,#222a40,#161b2b)}
 .foe-portrait{position:relative;height:150px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .foe-portrait.tall{height:250px}
 .foe-portrait.tall img.foe-sprite{height:176px}
@@ -1056,7 +1056,7 @@ button:active{transform:scale(.95)}
 .foe-intent.calm{color:#bfdbfe;background:#1c2a3a33}
 .foe-intent .lbl{color:var(--muted);font-weight:600}
 /* 即時攻擊量表 */
-.atk-meter{margin:2px 0 4px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#00000022}
+.atk-meter{margin:0 0 8px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#00000022}
 .atk-meter.empty{color:var(--muted);text-align:center;font-size:14px}
 .am-top{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;margin-bottom:7px}
 .am-top b{font-size:20px}
