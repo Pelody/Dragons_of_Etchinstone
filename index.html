@@ -2605,17 +2605,24 @@ function foeStageHTML(mode){
   const sprite=foeSprite();
   const idx=reg?encTargetIndex(isEnemy?reg.enemies:reg.journeys,t):-1;
   const no=idx>=0?`#${idx+1}`:"";
+  // 每個地區怪物的英文名（依敵人序號）；地點仍用場景名
+  const ENEMY_NAMES={"1":["Goblin","Orc","Slime","Dire Wolf"]};
+  const foeName=(isEnemy && ENEMY_NAMES[g.regionIdx] && ENEMY_NAMES[g.regionIdx][idx]) ? ENEMY_NAMES[g.regionIdx][idx] : encBaseName(t.name);
   const kindLabel=isEnemy?`${ic("skull","#fff",14)}<span>敵人 ${no}</span>`:`${ic("mountain","#fff",14)}<span>地點 ${no}</span>`;
   const fx=isEnemy
     ? `${t.ability?effectChip(t.ability,{short:true}):""}${effectsHTML(e.hardships,{short:true})}`
     : `${t.peril?effectChip(t.peril,{short:true}):""}${effectsHTML(e.hardships,{short:true})}`;
   const wmIcon=isEnemy?ic("skull",tone+"cc",84):ic("mountain",tone+"cc",72);
-  const portrait=`<div class="foe-portrait ${mode==='challenge'?'tall':'act'}" style="background:radial-gradient(circle at 50% 34%, ${tone}33, transparent 62%),linear-gradient(180deg,#243049,#161d2e)">
-      <div class="foe-wm">${wmIcon}</div>
-      ${sprite?`<img class="foe-sprite" src="${sprite}" alt="">`:""}
+  // 每張怪物立繪的比例不同 → 行動畫面用各自的顯示高度＋垂直位移（超出的部分由 overflow 裁掉）
+  const ACT_SPRITE={0:{h:132,y:6},1:{h:150,y:-4},2:{h:118,y:8},3:{h:140,y:6}};
+  const acfg=ACT_SPRITE[idx]||{h:120,y:4};
+  const spriteStyle=(mode==='action'&&sprite)?` style="height:${acfg.h}px;transform:translateY(${acfg.y}px)"`:'';
+  const portrait=`<div class="foe-portrait ${mode==='challenge'?'tall':'act'}" style="background:radial-gradient(circle at 50% 30%, #ffffff0f, transparent 60%),linear-gradient(180deg,#232a3d,#151b2a)">
+      ${sprite?'':`<div class="foe-wm">${wmIcon}</div>`}
+      ${sprite?`<img class="foe-sprite" src="${sprite}" alt=""${spriteStyle}>`:""}
       <div class="foe-kind">${kindLabel}</div>
       ${fx?`<div class="foe-fx">${fx}</div>`:""}
-      <div class="foe-name">${encBaseName(t.name)}</div>
+      <div class="foe-name">${foeName}</div>
     </div>`;
   let stats, intent;
   if(isEnemy){
