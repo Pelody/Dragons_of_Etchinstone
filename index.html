@@ -8,6 +8,7 @@
   :root{
     --water:#3b82f6; --fire:#ef4444; --lightning:#eab308; --shadow:#a78bfa;
     --bg:#0f1220; --panel:#1b2030; --panel2:#252b40; --line:#39405c; --txt:#e7e9f3; --muted:#9aa3c0;
+    --main-top-offset:118px;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,"PingFang TC","Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.45}
@@ -1131,7 +1132,7 @@ button:active{transform:scale(.95)}
 .cs-item svg,.cs-item .dual-icons{flex:0 0 auto}
 .cs-item.span2{grid-column:1 / -1}
 /* 挑戰畫面：只有一隻，整個置中（banner 不動） */
-body.challenge-mode #main{display:flex;flex-direction:column;min-height:calc(100dvh - 118px)}
+body.challenge-mode #main{display:flex;flex-direction:column;min-height:calc(100dvh - var(--main-top-offset))}
 body.challenge-mode #main .foe-stage{width:100%;flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
 body.challenge-mode #main .foe-stage .foe-portrait.tall{flex:1 1 auto;height:auto;min-height:260px}
 body.challenge-mode #main .btns{margin-top:auto;flex:0 0 auto}
@@ -2595,7 +2596,18 @@ function render(){
   if(lg) lg.textContent = "";
   bindCards();
   setHint();
+  syncMainTopOffset();
   autoSave();
+}
+function syncMainTopOffset(){
+  try{
+    const m=document.getElementById("main");
+    if(!m || typeof m.getBoundingClientRect!=="function") return;
+    const de=document.documentElement;
+    if(!de || !de.style || typeof de.style.setProperty!=="function") return;
+    const offset=Math.round(m.getBoundingClientRect().top+(window.scrollY||0));
+    if(offset>0) de.style.setProperty('--main-top-offset', offset+'px');
+  }catch(e){}
 }
 function phaseName(){return {challenge:"挑戰",action:"行動",penalty:"懲罰",upgrade:"升級",
   final_journey_intro:"Boss",final_journey:"最終旅程",final_enemy_intro:"最終敵人",gameover:"結束"}[g.phase]||g.phase;}
@@ -3724,6 +3736,15 @@ catch(e){
   document.getElementById('sub').textContent='發生錯誤';
   document.getElementById('main').innerHTML='<div class="banner">啟動失敗：'+(e&&e.message||e)+'</div>';
 }
+try{
+  if(typeof window!=="undefined" && typeof window.addEventListener==="function"){
+    window.addEventListener("resize",()=>{ try{ syncMainTopOffset(); }catch(e){} });
+    window.addEventListener("orientationchange",()=>{ try{ syncMainTopOffset(); }catch(e){} });
+    if(window.visualViewport && typeof window.visualViewport.addEventListener==="function"){
+      window.visualViewport.addEventListener("resize",()=>{ try{ syncMainTopOffset(); }catch(e){} });
+    }
+  }
+}catch(e){}
 </script>
 <script>
 /* ===== DOE 手感層 (juice)：純附加，不改任何遊戲邏輯 ===== */
