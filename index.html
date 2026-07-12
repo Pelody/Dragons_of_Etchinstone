@@ -1071,8 +1071,8 @@ button:active{transform:scale(.95)}
 .foe-portrait img.foe-sprite{height:118px;width:auto;image-rendering:pixelated;filter:drop-shadow(0 10px 18px rgba(0,0,0,.45));position:relative;z-index:1}
 .foe-kind{position:absolute;top:8px;left:10px;z-index:3;display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;letter-spacing:.4px;color:#fff;background:#0008;border:1px solid #ffffff26;border-radius:999px;padding:3px 9px}
 .foe-fx{position:absolute;top:8px;right:10px;z-index:3;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:60%}
-.foe-corner-stats{position:absolute;top:8px;right:10px;z-index:3;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;max-width:60%}
-.foe-corner-stats .cs-pill{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:800;color:#fff;background:#0008;border:1px solid #ffffff26;border-radius:999px;padding:3px 8px}
+.foe-corner-stats{position:absolute;top:8px;right:10px;z-index:3;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:5px;max-width:64%;font-size:12.5px;font-weight:800;color:#fff;background:#0008;border:1px solid #ffffff26;border-radius:12px;padding:4px 9px}
+.foe-corner-stats .cs-pill{display:inline-flex;align-items:center;gap:3px}
 .foe-corner-stats .cs-pill svg{width:13px;height:13px}
 .foe-corner-stats .cs-pill b{font-weight:800}
 .foe-bottom{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:6px 12px 8px;background:linear-gradient(180deg,rgba(8,11,18,0),rgba(8,11,18,.5) 42%,rgba(8,11,18,.82))}
@@ -1080,6 +1080,9 @@ button:active{transform:scale(.95)}
 .foe-name.dragon-name{font-family:'Snell Roundhand','Apple Chancery','Segoe Script','Brush Script MT',cursive;font-weight:400}
 .foe-portrait.act .foe-name.dragon-name{font-size:30px;margin-bottom:6px}
 .foe-stats{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:18px;margin-top:3px}
+.foe-stats .tier{gap:5px;padding:2px 6px;border-radius:8px}
+.foe-stats .tier .chip{font-size:14px;gap:2px}
+.foe-stats .tier .chip svg{width:15px;height:15px}
 /* 即時攻擊量表 */
 .atk-meter{margin:0 0 8px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#00000022}
 .atk-meter.empty{color:var(--muted);text-align:center;font-size:14px}
