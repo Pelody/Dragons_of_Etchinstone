@@ -572,10 +572,10 @@
     position:absolute;
     left:0;
     right:0;
-    bottom:0;
+    top:0;
     z-index:4;
-    padding:40px 14px 16px;
-    background:linear-gradient(180deg,rgba(8,11,18,0),rgba(8,11,18,.6));
+    padding:16px 14px 40px;
+    background:linear-gradient(180deg,rgba(8,11,18,.6),rgba(8,11,18,0));
     text-align:center;
     pointer-events:none;
   }
@@ -651,7 +651,7 @@
     position:absolute;
     left:16%;
     right:16%;
-    top:16px;
+    bottom:16px;
     display:grid;
     grid-template-columns:1fr 1fr 1fr;
     gap:6px;
@@ -1062,6 +1062,7 @@ button:active{transform:scale(.95)}
 .foe-portrait.tall .foe-name{font-size:23px}
 .foe-portrait.tall .foe-wm svg{width:118px;height:118px}
 .foe-portrait.act{height:152px}
+.foe-portrait.act.final-boss{height:220px}
 .foe-portrait.act .foe-name{font-size:17px}
 .foe-portrait.act .foe-wm svg{width:60px;height:60px}
 .foe-portrait .foe-wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.9;z-index:0}
@@ -1070,9 +1071,10 @@ button:active{transform:scale(.95)}
 .foe-portrait img.foe-sprite{height:118px;width:auto;image-rendering:pixelated;filter:drop-shadow(0 10px 18px rgba(0,0,0,.45));position:relative;z-index:1}
 .foe-kind{position:absolute;top:8px;left:10px;z-index:3;display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;letter-spacing:.4px;color:#fff;background:#0008;border:1px solid #ffffff26;border-radius:999px;padding:3px 9px}
 .foe-fx{position:absolute;top:8px;right:10px;z-index:3;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:60%}
-.foe-init-badge{position:absolute;top:8px;right:10px;z-index:3;display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:800;color:#fff;background:#0008;border:1px solid #ffffff26;border-radius:999px;padding:3px 9px}
-.foe-init-badge svg{width:14px;height:14px}
-.foe-init-badge b{font-weight:800}
+.foe-corner-stats{position:absolute;top:8px;right:10px;z-index:3;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;max-width:60%}
+.foe-corner-stats .cs-pill{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:800;color:#fff;background:#0008;border:1px solid #ffffff26;border-radius:999px;padding:3px 8px}
+.foe-corner-stats .cs-pill svg{width:13px;height:13px}
+.foe-corner-stats .cs-pill b{font-weight:800}
 .foe-bottom{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:6px 12px 8px;background:linear-gradient(180deg,rgba(8,11,18,0),rgba(8,11,18,.5) 42%,rgba(8,11,18,.82))}
 .foe-name{font-size:20px;font-weight:900;color:#fff;text-shadow:0 2px 10px #000;line-height:1.12}
 .foe-name.dragon-name{font-family:'Snell Roundhand','Apple Chancery','Segoe Script','Brush Script MT',cursive;font-weight:400}
@@ -2937,6 +2939,9 @@ function bossCoverView(){
   return `<div class="boss-cover">
       <div class="boss-board" style="${dragonPanelStyle(d.name)}">
         ${bossSprite?`<img class="boss-art-sprite" src="${bossSprite}" alt="">`:`<div class="boss-art-icon">${ic("skull",dragonColor(d.name),108)}</div>`}
+        <div class="boss-name-overlay"><div class="boss-name">${dragonEpithet(d.name)}</div></div>
+        <div class="boss-mp-stack">${mp}</div>
+        <div class="boss-hp-stack">${hp}</div>
         <div class="boss-bottom-stats">
           <div class="boss-stat-card">
             <div class="boss-stat-value">${chip("init","#cbd5e1",d.initiative)}</div>
@@ -2948,9 +2953,6 @@ function bossCoverView(){
             <div class="boss-stat-value">${arm}</div>
           </div>
         </div>
-        <div class="boss-mp-stack">${mp}</div>
-        <div class="boss-hp-stack">${hp}</div>
-        <div class="boss-name-overlay"><div class="boss-name">${dragonEpithet(d.name)}</div></div>
       </div>
     <div class="boss-actions">
       <button class="ghost" onclick="startRegroup()" ${g.regroupUsed?"disabled":""}>Regroup</button>
@@ -3000,15 +3002,18 @@ function finalStageHTML(kind){
   if(kind==="journey"){
     stats=d.mpTiers.map(t=>`<span class="tier">${chip("mountain",elc(t[1]),t[0])}${chip("hourglass","#cbd5e1",t[2])}</span>`).join("");
   } else {
-    stats=d.hpTiers.map(t=>`<span class="tier">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</span>`).join("")
-      +chip("sword",tone,d.earlyDamage.value)
-      +d.armor.map(a=>chip("shield",elc(a.element),a.value)).join("");
+    stats=d.hpTiers.map(t=>`<span class="tier">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</span>`).join("");
   }
-  const initBadge=kind==="enemy"?`<div class="foe-init-badge">${ic("init","#cbd5e1",14)}<b>${d.initiative}</b></div>`:"";
-  const portrait=`<div class="foe-portrait act" style="background:radial-gradient(circle at 50% 30%, ${tone}26, transparent 60%),linear-gradient(180deg,#232a3d,#151b2a)">
+  const cornerPill=(icon,color,val)=>`<span class="cs-pill">${ic(icon,color,13)}<b>${val}</b></span>`;
+  const cornerStats=kind==="enemy"?`<div class="foe-corner-stats">
+      ${cornerPill("init","#cbd5e1",d.initiative)}
+      ${cornerPill("sword",tone,d.earlyDamage.value)}
+      ${d.armor.map(a=>cornerPill("shield",elc(a.element),a.value)).join("")}
+    </div>`:"";
+  const portrait=`<div class="foe-portrait act final-boss" style="background:radial-gradient(circle at 50% 30%, ${tone}26, transparent 60%),linear-gradient(180deg,#232a3d,#151b2a)">
       ${sprite?`<img class="foe-sprite" src="${sprite}" alt="" style="height:172px">`:""}
       <div class="foe-kind">${kindLabel}</div>
-      ${initBadge}
+      ${cornerStats}
       <div class="foe-bottom"><div class="foe-name dragon-name">${dragonEpithet(d.name)}</div><div class="foe-stats">${stats}</div></div>
     </div>`;
   return `<div class="foe-stage">${portrait}</div>` + liveFinalMeterHTML(kind);
