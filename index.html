@@ -48,7 +48,7 @@
   .chips.big{gap:9px 14px;font-size:19px}
   .chip{display:inline-flex;align-items:center;gap:3px;font-size:16px;color:var(--txt)}
   .chip b{font-weight:700}
-  .tier{display:inline-flex;align-items:center;gap:1px;background:#0006;border-radius:8px;padding:2px 6px}
+  .tier{display:inline-flex;align-items:center;gap:8px;background:#00000040;border:1px solid #ffffff26;border-radius:10px;padding:3px 9px}
   svg{flex:none}
   .legendbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:8px 0;font-size:14px}
   .legendbox summary{cursor:pointer;color:var(--muted)}
@@ -1072,6 +1072,8 @@ button:active{transform:scale(.95)}
 .foe-fx{position:absolute;top:8px;right:10px;z-index:3;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:60%}
 .foe-bottom{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:6px 12px 8px;background:linear-gradient(180deg,rgba(8,11,18,0),rgba(8,11,18,.5) 42%,rgba(8,11,18,.82))}
 .foe-name{font-size:20px;font-weight:900;color:#fff;text-shadow:0 2px 10px #000;line-height:1.12}
+.foe-name.dragon-name{font-family:'Snell Roundhand','Apple Chancery','Segoe Script','Brush Script MT',cursive;font-weight:400}
+.foe-portrait.act .foe-name.dragon-name{font-size:30px;margin-bottom:6px}
 .foe-stats{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:18px;margin-top:3px}
 /* 即時攻擊量表 */
 .atk-meter{margin:0 0 8px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#00000022}
@@ -1095,6 +1097,12 @@ button:active{transform:scale(.95)}
 .atk-meter.narrow .am-out{color:#fbbf24}
 .atk-meter.fail .am-fill{background:linear-gradient(90deg,#7f1d1d,#f87171)}
 .atk-meter.fail .am-out{color:#f87171}
+.atk-meter.fm{margin-bottom:0}
+.fm-track{margin-bottom:16px}
+.fm-mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:#e5e7eb99;border-radius:2px}
+.fm-mark.reached{background:#34d399}
+.fm-mark-label{position:absolute;top:16px;left:50%;transform:translateX(-50%);font-size:9.5px;color:var(--muted);white-space:nowrap}
+.fm-mark-label.reached{color:#34d399;font-weight:800}
 .big-act{font-size:19px;font-weight:900;min-height:54px;letter-spacing:1px}
 /* 即時量表：後果行（XP／受傷／特殊效果同一排） */
 .am-conseq{display:flex;flex-wrap:wrap;gap:5px 10px;align-items:center;font-size:12.5px;color:var(--muted);margin-top:7px}
@@ -2574,7 +2582,7 @@ function render(){
   document.getElementById("sub").textContent =
     g.phase==="gameover"?"結束":`地區 ${g.regionIdx>4?4:g.regionIdx} · ${phaseName()}`;
   document.getElementById("deckinfo").innerHTML = `牌庫 ${g.deck.length}<br>手牌 ${g.hand.length}`;
-  m.innerHTML = viewFor()+previewHTML()+handPreviewHTML()+divertModalHTML()+regroupModalHTML()+newGameModalHTML()+actionPreviewHTML()+fuseModalHTML()+finalPreviewHTML()+legendModalHTML();
+  m.innerHTML = viewFor()+previewHTML()+handPreviewHTML()+divertModalHTML()+regroupModalHTML()+newGameModalHTML()+actionPreviewHTML()+fuseModalHTML()+finalPreviewHTML()+finalFuseModalHTML()+legendModalHTML();
   // log removed from UI
   if(lg) lg.textContent = "";
   bindCards();
@@ -2846,7 +2854,7 @@ function fuseModalHTML(){
     : `<div class="fz-card empty"><div class="fz-role">${role}</div><div class="fz-name muted"><span>—</span></div></div>`;
   return `<div class="preview-overlay" onclick="closeFuseModal()">
     <div class="action-modal slim fuse-modal" onclick="event.stopPropagation()">
-      <div class="fz-title">融合 <span>FUSION</span></div>
+      <div class="fz-title">融合</div>
       <div class="fz-desc">把 <b>Element 卡</b> 與一張<b>同元素的預備卡</b>合體，強化攻擊改成你選的元素。</div>
       <div class="fz-combine">
         ${fzCard(elemCard,"Element 卡")}
@@ -2978,62 +2986,121 @@ function finalSlotOf(i){const S=ui.fsel.sets;
   return null;}
 function finalPop(i){const r=finalSlotOf(i);if(!r)return null;
   return {text:`${r.role} ${r.set}`,cls:r.cls};}
-function finalDragonStripHTML(){
+function finalStageHTML(kind){
   const d=g.dragon;
   const sprite=dragonSprite(d.name);
   const tone=elc(d.earlyDamage.element);
-  return `<div class="foe-stage" style="margin-bottom:8px">
-    <div class="foe-portrait act" style="background:radial-gradient(circle at 50% 30%, ${tone}26, transparent 60%),linear-gradient(180deg,#232a3d,#151b2a)">
+  const kindLabel=kind==="journey"
+    ? `${ic("mountain","#fff",14)}<span>Final Journey</span>`
+    : `${ic("skull","#fff",14)}<span>Final Enemy</span>`;
+  let stats;
+  if(kind==="journey"){
+    stats=d.mpTiers.map(t=>`<span class="tier">${chip("mountain",elc(t[1]),t[0])}${chip("hourglass","#cbd5e1",t[2])}</span>`).join("");
+  } else {
+    stats=d.hpTiers.map(t=>`<span class="tier">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</span>`).join("")
+      +chip("init","#cbd5e1",d.initiative)
+      +chip("sword",tone,d.earlyDamage.value)
+      +d.armor.map(a=>chip("shield",elc(a.element),a.value)).join("");
+  }
+  const portrait=`<div class="foe-portrait act" style="background:radial-gradient(circle at 50% 30%, ${tone}26, transparent 60%),linear-gradient(180deg,#232a3d,#151b2a)">
       ${sprite?`<img class="foe-sprite" src="${sprite}" alt="" style="height:172px">`:""}
-      <div class="foe-bottom"><div class="foe-name">${dragonEpithet(d.name)}</div></div>
-    </div>
+      <div class="foe-kind">${kindLabel}</div>
+      <div class="foe-bottom"><div class="foe-name dragon-name">${dragonEpithet(d.name)}</div><div class="foe-stats">${stats}</div></div>
+    </div>`;
+  return `<div class="foe-stage">${portrait}</div>` + liveFinalMeterHTML(kind);
+}
+function liveFinalMeterHTML(kind){
+  const d=g.dragon;
+  const tiers=kind==="journey"?d.mpTiers.map(t=>t[0]):d.hpTiers.map(t=>t[0]);
+  const maxTier=tiers[tiers.length-1];
+  const label=kind==="journey"?"移動力":"攻擊力";
+  let payload=null; try{ payload=buildFinalPayload(kind); }catch(err){ payload=null; }
+  const ok=!!(payload&&payload.ok);
+  const val=ok?(kind==="journey"?payload.detail.totalMove:payload.detail.totalAtk):0;
+  const reachedIdx=tiers.reduce((acc,t,i)=>val>=t?i:acc,-1);
+  const outcome=reachedIdx<0?"失敗":`檔 ${reachedIdx+1}`;
+  const cls=reachedIdx<0?"fail":(reachedIdx===tiers.length-1?"win":"narrow");
+  const pct=maxTier>0?Math.max(4,Math.min(100,Math.round(val/maxTier*100))):4;
+  const marks=tiers.map((t,i)=>{
+    const mpct=maxTier>0?Math.min(97,Math.round(t/maxTier*100)):0;
+    const reached=i<=reachedIdx;
+    return `<div class="fm-mark ${reached?'reached':''}" style="left:${mpct}%"><span class="fm-mark-label ${reached?'reached':''}">檔${i+1}</span></div>`;
+  }).join("");
+  return `<div class="atk-meter fm ${cls}">
+    <div class="am-top"><span>${label} <b>${val}</b> <span style="color:var(--muted)">▸ 第一檔 ${tiers[0]}</span></span><span class="am-out">${outcome}</span></div>
+    <div class="am-track fm-track"><div class="am-fill" style="width:${pct}%"></div>${marks}</div>
   </div>`;
 }
-function finalPhaseHeaderHTML(kind){
-  const d=g.dragon;
-  const init=chip("init","#cbd5e1",d.initiative);
-  const early=chip("sword",elc(d.earlyDamage.element),d.earlyDamage.value);
-  const arm=d.armor.map(a=>chip("shield",elc(a.element),a.value)).join("");
-  const strip=finalDragonStripHTML();
-  if(kind==="journey"){
-    const tiers=d.mpTiers.map(t=>`<span class="tier">${chip("mountain",elc(t[1]),t[0])}${chip("hourglass","#cbd5e1",t[2])}</span>`).join("");
-    return strip+`<div class="enc"><div class="enc-mini-title">${ic("mountain","#ffffff",15)}<span>Final Journey</span></div>
-      <div class="chips big">${tiers}</div></div>`;
-  }
-  const tiers=d.hpTiers.map(t=>`<span class="tier">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</span>`).join("");
-  return strip+`<div class="enc"><div class="enc-mini-title">${ic("skull","#ffffff",15)}<span>Final Enemy</span></div>
-    <div class="chips big">${tiers}</div>
-    <div class="chips big" style="margin-top:8px">${init}${early}${arm}</div></div>`;
-}
 function finalView(kind){
-  const isJ=kind==="journey";
   const ready=ui.fsel.sets.some(s=>s.s!=null);
-  if(ui.regroup) return finalPhaseHeaderHTML(kind)+`<h2>選一張棄掉並重抽 7 張</h2>`+handHTML();
   const phaseNote="點卡片循環指派兩組行動";
-  return finalPhaseHeaderHTML(kind)
+  const fused=ui.fsel.fuseSet!=null;
+  return finalStageHTML(kind)
     +`<div class="phase-note">${phaseNote}</div>`
     +handHTML(finalPop)
-    +`<div class="btns">
-        ${flipBtn()}
-        <button class="ghost" onclick="suggestFinal('${kind}')">建議</button>
-        <button class="ghost" onclick="clearFinal()">清除</button>
-        <button class="primary" ${ready?'':'disabled'} onclick="openFinalPreview('${kind}')">確定結算</button>
-      </div>`
-    + finalFuseInfo();
+    +`<div class="action-toolbar">
+        <div class="action-controls onebar">
+          <button class="${fused?'warn':'ghost'} tb" onclick="openFinalFuseModal('${kind}')">融合${fused?'✓':''}</button>
+          <button class="ghost tb" onclick="suggestFinal('${kind}')">建議</button>
+          <button class="ghost tb" onclick="clearFinal()">清除</button>
+          <button class="primary big-act atk-inline" ${ready?'':'disabled'} onclick="openFinalPreview('${kind}')">${kind==="journey"?"🥾 前進":"⚔️ 攻擊"}</button>
+        </div>
+      </div>`;
 }
-function finalFuseInfo(){
-  if(!ui.fsel) return "";
+function openFinalFuseModal(kind){
+  ui.finalFuseKind=kind;
+  ui.finalFuseModalOpen=true;
+  render();
+}
+function closeFinalFuseModal(){ ui.finalFuseModalOpen=false; render(); }
+function cancelFinalFuse(){ ui.fsel.fuseSet=null; ui.fsel.fuseElement=null; ui.finalFuseModalOpen=false; render(); }
+function confirmFinalFuse(){ ui.finalFuseModalOpen=false; render(); }
+function finalFuseModalHTML(){
+  if(!ui.finalFuseModalOpen) return "";
   const fs=ui.fsel;
+  if(fs.fuseSet==null){
+    return `<div class="preview-overlay" onclick="closeFinalFuseModal()">
+      <div class="action-modal slim fuse-modal" onclick="event.stopPropagation()">
+        <div class="fz-title">融合</div>
+        <div class="fz-desc">選擇要融合的行動組別。</div>
+        <div class="btns">
+          <button class="primary" onclick="setFinalFuse(0)">融合組 1</button>
+          <button class="primary" onclick="setFinalFuse(1)">融合組 2</button>
+        </div>
+        <div class="ap-buttons"><button class="ghost" onclick="closeFinalFuseModal()">取消</button></div>
+      </div>
+    </div>`;
+  }
   const used=new Set(); fs.sets.forEach(st=>[st.s,st.e,st.b].forEach(x=>{if(x!=null)used.add(x);}));
   let reserveIdx=null; for(let i=0;i<g.hand.length;i++) if(!used.has(i)){ reserveIdx=i; break; }
-  const buttons=`<div class="btns"><button class="${fs.fuseSet==null?'on':'ghost'}" onclick="setFinalFuse(null)">不融合</button><button class="${fs.fuseSet===0?'warn':'ghost'}" onclick="setFinalFuse(0)">融合組1</button><button class="${fs.fuseSet===1?'warn':'ghost'}" onclick="setFinalFuse(1)">融合組2</button></div>`;
-  if(fs.fuseSet==null) return buttons;
   const st=fs.sets[fs.fuseSet];
-  const top=st&&st.e!=null?g.hand[st.e]:null, bottom=reserveIdx!=null?g.hand[reserveIdx]:null;
-  let msg=`融合：組${fs.fuseSet+1} 的 Element 角色作上方卡，未指派卡作下方卡；兩張必須同元素。`;
-  if(top&&bottom) msg+=`<br>目前：${top.name}(${top.cardElement}) + ${bottom.name}(${bottom.cardElement}) → ${fs.fuseElement||'未選元素'}`;
-  else msg+=`<br>目前缺少該組 Element 或未指派卡，不能融合。`;
-  return buttons+`<div class="muted">${msg}</div>`+elementButtons(fs.fuseElement,'setFinalFuseElement');
+  const elemCard=st&&st.e!=null?g.hand[st.e]:null;
+  const reserveCard=reserveIdx!=null?g.hand[reserveIdx]:null;
+  const labels={water:"水",fire:"火",lightning:"雷",shadow:"暗"};
+  let valid=false, reason="";
+  if(!elemCard) reason="請先在該組指派一張 Element 卡";
+  else if(!reserveCard) reason="沒有可用的預備卡（需留一張未指派）";
+  else if(elemCard.cardElement!==reserveCard.cardElement) reason=`兩張元素不同：${labels[elemCard.cardElement]} ≠ ${labels[reserveCard.cardElement]}`;
+  else if(!fs.fuseElement) reason="請選擇融合後的新元素";
+  else { const vf=DOEGame.validateFuse(g.hand,st.e,reserveIdx,fs.fuseElement); valid=vf.ok; if(!vf.ok) reason=vf.reason||"無法融合"; }
+  const fzCard=(c,role)=> c
+    ? `<div class="fz-card ${EL[c.cardElement]}"><div class="fz-role">${role}</div><div class="fz-name">${ic(c.cardElement,elc(c.cardElement),18)}<span>${shortName(c.name)}</span></div></div>`
+    : `<div class="fz-card empty"><div class="fz-role">${role}</div><div class="fz-name muted"><span>—</span></div></div>`;
+  return `<div class="preview-overlay" onclick="closeFinalFuseModal()">
+    <div class="action-modal slim fuse-modal" onclick="event.stopPropagation()">
+      <div class="fz-title">融合 · 組${fs.fuseSet+1}</div>
+      <div class="fz-desc">把 <b>Element 卡</b> 與一張<b>同元素的預備卡</b>合體，強化攻擊改成你選的元素。</div>
+      <div class="fz-combine">
+        ${fzCard(elemCard,"Element 卡")}
+        <div class="fz-op">＋</div>
+        ${fzCard(reserveCard,"預備卡")}
+      </div>
+      <div class="fz-arrow">融合後 · 強化元素改為</div>
+      <div class="fz-elems">${["water","fire","lightning","shadow"].map(e=>`<button class="fz-elem ${fs.fuseElement===e?'on':''}" style="--ec:${elc(e)}" onclick="setFinalFuseElement('${e}')">${ic(e,elc(e),24)}<span>${labels[e]}</span></button>`).join("")}</div>
+      ${!valid?`<div class="fz-warn">${reason}</div>`:`<div class="fz-ok">✓ 可融合：強化攻擊將以 <b style="color:${elc(fs.fuseElement)}">${labels[fs.fuseElement]}</b> 元素判定</div>`}
+      <div class="ap-buttons"><button class="ghost" onclick="cancelFinalFuse()">取消融合</button><button class="primary big-act" ${valid?'':'disabled'} onclick="confirmFinalFuse()">確定融合</button></div>
+    </div>
+  </div>`;
 }
 function dragonHTML(){
   const d=g.dragon;
@@ -3494,14 +3561,13 @@ function startFinalJourney(){
   g.phase="final_journey";
   render();
 }
-function calcFinalPreviewDetails(kind,built,reserveCard,result){
+function calcFinalPreviewDetails(kind,built,reserveCard){
   const d=g.dragon;
-  let rows="", targetRows="", resultRows="", effectRows="";
   if(kind==="journey"){
     const reserveBoost=reserveCard?curLevel(reserveCard).boost:0;
     const mpElems=new Set(d.mpTiers.map(t=>t[1]).filter(Boolean));
     let usedReserve=false, totalMove=0;
-    built.forEach((set,idx)=>{
+    built.forEach(set=>{
       const elem=DOEEngine.elementOf(set);
       const picked=DOEEngine.pickAction(set.spell,elem);
       const action=picked[0], used=picked[1];
@@ -3510,71 +3576,30 @@ function calcFinalPreviewDetails(kind,built,reserveCard,result){
       const enhEl=curLevel(set.spell).enhanced.element;
       const isEnhMove=used==="enhanced" && DOEEngine.actionSupports(action,"move");
       let reserveAdd=0;
-      if(!usedReserve && isEnhMove && reserveBoost && mpElems.has(enhEl)){
-        reserveAdd=reserveBoost;
-        usedReserve=true;
-        effectRows+=metricRow("boost","#86efac","預備卡 Boost","匹配 MP 元素",`+${reserveAdd}`);
-      }
-      const mv=base+boost+reserveAdd;
-      totalMove+=mv;
-      const formula=`${base}${boost?`+${boost}`:""}${reserveAdd?`+${reserveAdd}`:""}`;
-      rows+=metricRow("boot",isEnhMove?elc(enhEl):"#cbd5e1",`組${idx+1} 移動`,formula,mv);
+      if(!usedReserve && isEnhMove && reserveBoost && mpElems.has(enhEl)){ reserveAdd=reserveBoost; usedReserve=true; }
+      totalMove+=base+boost+reserveAdd;
     });
-    rows+=metricRow("boot","#cbd5e1","總移動","",totalMove);
-    targetRows=d.mpTiers.map((t,i)=>metricRow("mountain",elc(t[1]),`MP 檔 ${i+1}`,`時間 ${t[2]}`,t[0])).join("");
-    if(result.lose){
-      resultRows+=`<div class="ap-row"><div class="left"><span class="ap-result rp-warn">失敗</span></div><div class="mid">未達第一檔 MP</div><b></b></div>`;
-    }else{
-      resultRows+=`<div class="ap-row"><div class="left"><span class="ap-result rp-up">通過</span></div><div class="mid"></div><b></b></div>`;
-      resultRows+=metricRow("hourglass","#cbd5e1","時間懲罰","",result.timePenalty);
-    }
-  }else{
-    let totalAtkBeforeArmor=0, totalInit=0;
-    const enhElems=new Set();
-    built.forEach((set,idx)=>{
-      const elem=DOEEngine.elementOf(set);
-      const picked=DOEEngine.pickAction(set.spell,elem);
-      const action=picked[0], used=picked[1];
-      const baseAtk=DOEEngine.actionValue(action,"attack");
-      const baseInit=set.element?curLevel(set.element).initiative:0;
-      const boost=set.boost?curLevel(set.boost).boost:0;
-      let atk=baseAtk, init=baseInit;
-      if(set.boostTarget==="initiative") init+=boost;
-      else atk+=boost;
-      totalAtkBeforeArmor+=atk;
-      totalInit+=init;
-      const enhEl=curLevel(set.spell).enhanced.element;
-      const isEnhAttack=used==="enhanced" && DOEEngine.actionSupports(action,"attack");
-      if(isEnhAttack) enhElems.add(enhEl);
-      rows+=metricRow("sword",isEnhAttack?elc(enhEl):"#cbd5e1",`組${idx+1} 攻擊`,`${baseAtk}${set.boostTarget==="attack"&&boost?`+${boost}`:""}`,atk);
-      rows+=metricRow("init","#cbd5e1",`組${idx+1} 先攻`,`${baseInit}${set.boostTarget==="initiative"&&boost?`+${boost}`:""}`,init);
-    });
-    let armorHit=0;
-    d.armor.forEach(ar=>{
-      if(enhElems.has(ar.element)){
-        armorHit+=ar.value;
-        effectRows+=metricRow("shield",elc(ar.element),"龍護甲","匹配強化攻擊",`-${ar.value}`);
-      }
-    });
-    const totalAtk=Math.max(0,totalAtkBeforeArmor-armorHit);
-    rows+=metricRow("sword","#cbd5e1","總攻擊",armorHit?`${totalAtkBeforeArmor}-${armorHit}`:"",totalAtk);
-    rows+=metricRow("init","#cbd5e1","總先攻","",totalInit);
-    targetRows=d.hpTiers.map((t,i)=>metricRow("heart","#fca5a5",`HP 檔 ${i+1}`,`傷害 ${t[1].value}`,t[0])).join("");
-    targetRows+=metricRow("init","#cbd5e1","龍先攻","",d.initiative);
-    targetRows+=metricRow("sword",elc(d.earlyDamage.element),"Early Attack","",d.earlyDamage.value);
-    d.armor.forEach(a=>{ targetRows+=metricRow("shield",elc(a.element),"護甲","",a.value); });
-    if(totalInit<d.initiative){
-      effectRows+=metricRow("sword",elc(d.earlyDamage.element),"Early Attack",`先攻 ${totalInit} < ${d.initiative}`,d.earlyDamage.value);
-    }
-    if(result.lose){
-      resultRows+=`<div class="ap-row"><div class="left"><span class="ap-result rp-warn">失敗</span></div><div class="mid">未達第一檔 HP</div><b></b></div>`;
-    }else{
-      resultRows+=`<div class="ap-row"><div class="left"><span class="ap-result rp-up">命中</span></div><div class="mid"></div><b></b></div>`;
-      resultRows+=metricRow("heart","#fca5a5","龍總傷害","",result.totalDamage);
-      resultRows+=metricRow("sword",result.damageElement?elc(result.damageElement):"#cbd5e1","傷害元素","",result.damageElement||"—");
-    }
+    return {totalMove};
   }
-  return {rows,targetRows,resultRows,effectRows};
+  let totalAtkBeforeArmor=0, totalInit=0;
+  const enhElems=new Set();
+  built.forEach(set=>{
+    const elem=DOEEngine.elementOf(set);
+    const picked=DOEEngine.pickAction(set.spell,elem);
+    const action=picked[0], used=picked[1];
+    const baseAtk=DOEEngine.actionValue(action,"attack");
+    const baseInit=set.element?curLevel(set.element).initiative:0;
+    const boost=set.boost?curLevel(set.boost).boost:0;
+    let atk=baseAtk, init=baseInit;
+    if(set.boostTarget==="initiative") init+=boost; else atk+=boost;
+    totalAtkBeforeArmor+=atk; totalInit+=init;
+    const enhEl=curLevel(set.spell).enhanced.element;
+    if(used==="enhanced" && DOEEngine.actionSupports(action,"attack")) enhElems.add(enhEl);
+  });
+  let armorHit=0;
+  d.armor.forEach(ar=>{ if(enhElems.has(ar.element)) armorHit+=ar.value; });
+  const totalAtk=Math.max(0,totalAtkBeforeArmor-armorHit);
+  return {totalAtk,totalInit};
 }
 function buildFinalPayload(kind){
   const t=kind==="journey"?"move":"attack";
@@ -3602,38 +3627,24 @@ function buildFinalPayload(kind){
   const result=kind==="journey"
     ? DOEEngine.resolveFinalJourney(built,g.dragon,reserveCard)
     : DOEEngine.resolveFinalEnemy(built,g.dragon);
-  const detail=calcFinalPreviewDetails(kind,built,reserveCard,result);
+  const detail=calcFinalPreviewDetails(kind,built,reserveCard);
   return {ok:true,kind,sets,reserveIdx,fuseSetIndex,data:result,detail};
 }
 function finalPreviewHTML(){
   const p=ui.finalPreview;
   if(!p) return "";
   const isJ=p.kind==="journey";
-  const d=p.detail||{};
-  const title=isJ?"Final Journey 預覽":"Final Enemy 預覽";
+  const r=p.data, d=p.detail||{};
+  const outcome=r.lose?"失敗":(isJ?"通過":"命中");
+  const vClass=r.lose?"fail":"win";
+  const tally=isJ
+    ? `<div class="t">${ic("boot","#cbd5e1",18)} 總移動 ${d.totalMove||0}</div><div class="t">${ic("hourglass","#cbd5e1",18)} 時間懲罰 ${r.lose?"—":r.timePenalty}</div>`
+    : `<div class="t dmg">${ic("heart","#fca5a5",18)} 龍總傷害 ${r.lose?"—":r.totalDamage}</div><div class="t">${ic("sword",r.damageElement?elc(r.damageElement):"#cbd5e1",18)} 傷害元素 ${r.lose?"—":(r.damageElement||"—")}</div>`;
   return `<div class="preview-overlay" onclick="closeFinalPreview()">
-    <div class="action-modal" onclick="event.stopPropagation()">
-      <div class="preview-head">
-        <div class="preview-title">${title}</div>
-        <button class="preview-close" type="button" onclick="closeFinalPreview()">×</button>
-      </div>
-      <div class="ap-section">
-        <div class="ap-title">你的總數值</div>
-        ${d.rows||""}
-      </div>
-      <div class="ap-section">
-        <div class="ap-title">對象數值</div>
-        ${d.targetRows||""}
-      </div>
-      ${d.effectRows?`<div class="ap-section"><div class="ap-title">特殊效果</div>${d.effectRows}</div>`:""}
-      <div class="ap-section">
-        <div class="ap-title">結果</div>
-        ${d.resultRows||""}
-      </div>
-      <div class="ap-buttons">
-        <button class="ghost" onclick="closeFinalPreview()">取消</button>
-        <button class="primary" onclick="executeFinalPreview()">確定結算</button>
-      </div>
+    <div class="action-modal slim" onclick="event.stopPropagation()">
+      <div class="ap-verdict ${vClass}">${outcome}</div>
+      <div class="ap-tally">${tally}</div>
+      <div class="ap-buttons"><button class="ghost" onclick="closeFinalPreview()">取消</button><button class="primary big-act" onclick="executeFinalPreview()">確定</button></div>
     </div>
   </div>`;
 }
