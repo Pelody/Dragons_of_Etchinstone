@@ -1839,10 +1839,7 @@ window.DOE_REAL = {"mageCards": [{"name": "Rain of Blood", "cardElement": "light
       }
       r.log.forEach(l => this.out(l));
       this.out(`結果：${r.outcome}｜XP ${r.xp}｜時間懲罰 ${r.timePenalty}｜傷害 ${dmg}`);
-      if (fusedBottom) {
-        const i = this.hand.indexOf(fusedBottom);
-        if (i >= 0) { this.hand.splice(i, 1); this.discard.push(fusedBottom); this.out(`融合下方卡 ${fusedBottom.name} 移出手牌`); }
-      }
+      if (fusedBottom) this.out(`融合下方卡 ${fusedBottom.name} 於 Action Phase 後與上方卡分離，之後視為獨立手牌（可承受傷害／升級），清理階段才會棄掉`);
       this.tx = { r, dmg, atkEl, roleCards, reserveCard, set, needDiscardReserve: r.discardReserve, fuse: !!fusedBottom, fusedBottom };
       this.phase = "penalty";
       return r;
@@ -1866,6 +1863,7 @@ window.DOE_REAL = {"mageCards": [{"name": "Rain of Blood", "cardElement": "light
     _cleanup() {
       const tx = this.tx;
       for (const c of tx.roleCards) { const i = this.hand.indexOf(c); if (i >= 0) { this.hand.splice(i, 1); this.discard.push(c); } }
+      if (tx.fusedBottom) { const i = this.hand.indexOf(tx.fusedBottom); if (i >= 0) { this.hand.splice(i, 1); this.discard.push(tx.fusedBottom); this.out(`清理：融合下方卡 ${tx.fusedBottom.name} 移出手牌`); } }
       if (tx.needDiscardReserve && tx.reserveCard) { const i = this.hand.indexOf(tx.reserveCard); if (i >= 0) { this.hand.splice(i, 1); this.discard.push(tx.reserveCard); this.out("清理：棄掉預備卡（Freeze/Ranged）"); } }
       this.drawTo(4);
       if (tx.r.poison && this.hand.length) this.pendingPoison += tx.r.poison;
@@ -1924,7 +1922,7 @@ window.DOE_REAL = {"mageCards": [{"name": "Rain of Blood", "cardElement": "light
         }
         sets.push(buildSet(this.hand, s.s, s.e, s.b, s.t || "move", fusedEl));
       }
-      if (fusedBottom) { const i = this.hand.indexOf(fusedBottom); if (i >= 0) { this.hand.splice(i,1); this.discard.push(fusedBottom); this.out(`融合下方卡 ${fusedBottom.name} 移出手牌`); } }
+      if (fusedBottom) this.out(`融合下方卡 ${fusedBottom.name} 於 Action Phase 後與上方卡分離，之後視為獨立手牌`);
       const fj = resolveFinalJourney(sets, this.dragon, reserve);
       fj.log.forEach(l => this.out(l));
       if (fj.lose) { this._finish(false); return fj; }
@@ -1960,7 +1958,7 @@ window.DOE_REAL = {"mageCards": [{"name": "Rain of Blood", "cardElement": "light
         }
         sets.push(buildSet(this.hand, s.s, s.e, s.b, s.t || "attack", fusedEl));
       }
-      if (fusedBottom) { const i = this.hand.indexOf(fusedBottom); if (i >= 0) { this.hand.splice(i,1); this.discard.push(fusedBottom); this.out(`融合下方卡 ${fusedBottom.name} 移出手牌`); } }
+      if (fusedBottom) this.out(`融合下方卡 ${fusedBottom.name} 於 Action Phase 後與上方卡分離，之後視為獨立手牌（可承受傷害）`);
       const fe = resolveFinalEnemy(sets, this.dragon);
       fe.log.forEach(l => this.out(l));
       if (fe.lose) { this._finish(false); return fe; }
@@ -2233,7 +2231,7 @@ function debugBossBattle(){
 function normEffect(e){ return (e && e !== "none") ? e : null; }
 function effectMeta(e){
   const M={
-    night_travel:{icon:"shadow", color:"#c4b5fd", label:"Night Travel", short:"Night", group:"Hardship", desc:"Boost 減少你的 Initiative，最低為 0。"},
+    night_travel:{icon:"shadow", color:"#c4b5fd", label:"Night Travel", short:"Night", group:"Hardship", desc:"將你的 Boost 減去 Initiative，最低為 0。"},
     hazards:{icon:"mountain", color:"#facc15", label:"Hazards", short:"Hazard", group:"Hardship", desc:"受 Early Damage：+1 時間；受 Combat Damage：再 +1 時間。"},
     storm:{icon:"lightning", color:"#93c5fd", label:"Storm", short:"Storm", group:"Hardship", desc:"若本遭遇承受時間懲罰，追加等量傷害。"},
     ambush:{icon:"sword", color:"#fca5a5", label:"Ambush", short:"Ambush", group:"Hardship", desc:"本遭遇 Early Damage 加倍。"},
