@@ -7,7 +7,8 @@
 <style>
   :root{
     --water:#3b82f6; --fire:#ef4444; --lightning:#eab308; --shadow:#a78bfa;
-    --bg:#0f1220; --panel:#1b2030; --panel2:#252b40; --line:#39405c; --txt:#e7e9f3; --muted:#9aa3c0;
+    --bg:#0f1220; --panel:linear-gradient(180deg,#20263e,#0d101c); --panel2:linear-gradient(180deg,#262d48,#12151f);
+    --line:#8c774a; --gold:#d9b878; --gold-dim:#8c774a; --txt:#e7e9f3; --muted:#9aa3c0;
     --main-top-offset:118px;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -62,10 +63,12 @@
   .enc .nm{font-weight:700;font-size:17px}
   .pill{display:inline-block;background:#000a;border-radius:8px;padding:2px 9px;margin:2px 4px 2px 0;font-size:14px}
   .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-  button{appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--txt);border-radius:12px;padding:12px 14px;font-size:16px;font-weight:600;flex:1 1 auto;min-height:46px}
-  button.primary{background:#3b82f6;border-color:#3b82f6;color:#fff}
+  button{appearance:none;border:1px solid var(--gold-dim);background:linear-gradient(180deg,#232a44,#0d101c);color:#f4ecd2;border-radius:12px;padding:12px 14px;font-size:16px;font-weight:600;flex:1 1 auto;min-height:46px;letter-spacing:.03em;box-shadow:0 4px 12px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.07);transform:translateY(0) scale(1);filter:brightness(1);transition:transform .1s ease,box-shadow .12s ease,filter .12s ease,border-color .12s ease}
+  button:active{transform:translateY(1px) scale(.97);box-shadow:0 1px 4px rgba(0,0,0,.5),0 0 14px rgba(255,205,110,.5);filter:brightness(1.15)}
+  button.primary{border-color:var(--gold);box-shadow:0 4px 12px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.07),0 0 12px rgba(217,184,120,.22)}
+  button.primary:active{border-color:#f0d9a0;box-shadow:0 1px 4px rgba(0,0,0,.5),0 0 20px rgba(255,205,110,.7);filter:brightness(1.2)}
   button.warn{background:#7c3aed;border-color:#7c3aed;color:#fff}
-  button.ghost{background:transparent}
+  button.ghost{background:linear-gradient(180deg,#232a44,#0d101c)}
   button:disabled{opacity:.4}
   .toggle{display:flex;gap:6px}
   .toggle button.on{background:#22c55e;border-color:#22c55e;color:#042}
@@ -1013,8 +1016,6 @@
 @keyframes fxFloat{0%{opacity:0;transform:translate(-50%,-22%) scale(.5)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}72%{opacity:1;transform:translate(-50%,-55%) scale(1)}100%{opacity:0;transform:translate(-50%,-95%) scale(1)}}
 #app.fx-shake{animation:fxShake .38s}
 @keyframes fxShake{0%,100%{transform:translate(0,0)}15%{transform:translate(-5px,2px)}30%{transform:translate(5px,-2px)}45%{transform:translate(-4px,1px)}60%{transform:translate(4px,-1px)}80%{transform:translate(-2px,1px)}}
-button{transition:transform .06s ease}
-button:active{transform:scale(.95)}
 .card{transition:box-shadow .15s ease}
 .card.sel{box-shadow:0 0 0 2px #6ee7ff,0 0 18px #6ee7ff88}
 /* ===== 戰鬥場景（呈現層，零邏輯改動） ===== */
