@@ -206,22 +206,37 @@
     inset:0;
     width:100%;
     height:100%;
-    object-fit:contain;
+    object-fit:cover;
+    object-position:center center;
   }
   .cover-btn{
     position:absolute;
-    border:none;
-    background:transparent;
+    border:2px solid transparent;
+    border-radius:10px;
+    background:rgba(255,255,255,0);
     padding:0;
     margin:0;
     min-height:0;
     min-width:0;
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
+    transition:transform .08s ease, background .08s ease, border-color .08s ease, box-shadow .08s ease;
+  }
+  .cover-btn:active{
+    transform:scale(.94);
+    background:rgba(255,214,120,.28);
+    border-color:rgba(255,224,150,.85);
+    box-shadow:0 0 16px rgba(255,200,100,.6), inset 0 0 10px rgba(255,255,255,.3);
   }
   .cover-btn.is-disabled{
     background:rgba(5,7,13,.55);
     cursor:default;
+  }
+  .cover-btn.is-disabled:active{
+    transform:none;
+    background:rgba(5,7,13,.55);
+    border-color:transparent;
+    box-shadow:none;
   }
   .cover-debug-btn{
     position:absolute;
@@ -2134,9 +2149,20 @@ function syncCoverButtons(){
     const box=img.getBoundingClientRect();
     const natW=1024, natH=1536, imgRatio=natW/natH;
     const boxRatio=box.width/box.height;
-    let dispW,dispH,offX,offY;
-    if(boxRatio>imgRatio){ dispH=box.height; dispW=dispH*imgRatio; offX=(box.width-dispW)/2; offY=0; }
-    else { dispW=box.width; dispH=dispW/imgRatio; offX=0; offY=(box.height-dispH)/2; }
+    let dispW,dispH;
+    if(boxRatio>=imgRatio){
+      dispW=box.width; dispH=dispW/imgRatio;
+    } else {
+      // fill height (crop sides) but cap the crop so the drawn Start/Continue
+      // buttons (image x ~137-840 of 1024, centered off-center at 488.5 vs the
+      // image's own center 512) never get clipped off-screen; the tighter side
+      // is the left button (needs a >=750 wide window), add margin for safety
+      const MIN_VISIBLE_W=820;
+      const coverDispW=box.height*imgRatio;
+      dispW=Math.min(coverDispW, box.width*natW/MIN_VISIBLE_W);
+      dispH=dispW/imgRatio;
+    }
+    const offX=(box.width-dispW)/2, offY=(box.height-dispH)/2;
     const BTNS={
       coverBtnStart:{l:137/1024,r:460/1024,t:1255/1536,b:1355/1536},
       coverBtnContinue:{l:518/1024,r:840/1024,t:1255/1536,b:1355/1536},
