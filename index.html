@@ -206,10 +206,9 @@
        --disp-w/h reproduce the exact box the browser renders the image
        into, purely in CSS, with no JS measurement involved. The min()
        caps how far it can crop so the Start/Continue rectangles painted
-       into the art (measured image-x 148-872 of 1024) always stay on
-       screen; verified against a fresh pixel-level gold-border scan of
-       the source art, not eyeballed. */
-    --disp-w: min(66.6667dvh, 128vw);
+       into the art (measured image-x 151-869 of 1024, gold-border pixel
+       scan) always stay on screen. */
+    --disp-w: min(66.6667dvh, 135.0923vw);
     --disp-h: calc(var(--disp-w) * 1.5);
     --off-x: calc(50vw - var(--disp-w) * 0.49805);
     --off-y: calc((100dvh - var(--disp-h)) / 2);
@@ -229,8 +228,8 @@
   }
   .cover-action-btn{
     position:absolute;
-    top:calc(var(--off-y) + var(--disp-h) * .80534);
-    height:calc(var(--disp-h) * .11263);
+    top:calc(var(--off-y) + var(--disp-h) * .81966);
+    height:calc(var(--disp-h) * .08398);
     min-height:0;
     border-radius:12px;
     border:1px solid #d9b878;
@@ -248,12 +247,12 @@
     transition:transform .1s ease, box-shadow .12s ease, filter .12s ease;
   }
   .cover-action-btn.start{
-    left:calc(var(--off-x) + var(--disp-w) * .12793);
-    width:calc(var(--disp-w) * .36816);
+    left:calc(var(--off-x) + var(--disp-w) * .14746);
+    width:calc(var(--disp-w) * .32910);
   }
   .cover-action-btn.continue{
-    left:calc(var(--off-x) + var(--disp-w) * .48828);
-    width:calc(var(--disp-w) * .37988);
+    left:calc(var(--off-x) + var(--disp-w) * .50781);
+    width:calc(var(--disp-w) * .34082);
   }
   .cover-action-btn:active{
     transform:translateY(1px) scale(.96);
